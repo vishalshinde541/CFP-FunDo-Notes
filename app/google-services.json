@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "310283539624",
+    "project_id": "login-and-signup-with-fragment",
+    "storage_bucket": "login-and-signup-with-fragment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310283539624:android:a0e2e3dfe68d4796ac1e9d",
+        "android_client_info": {
+          "package_name": "com.example.loginandregistrationwithfragment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310283539624-sn3565ghcuoo5so3dkk0dm7ve3qj03ev.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.loginandregistrationwithfragment",
+            "certificate_hash": "29dc4c5004823405ac69b6627375b8b434a78867"
+          }
+        },
+        {
+          "client_id": "310283539624-q3fma2cd9bbkkkg86vldk2in5is8au6m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp8HBEtj8jjTEgSbrHSO0UsxdqibW14oU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310283539624-q3fma2cd9bbkkkg86vldk2in5is8au6m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
