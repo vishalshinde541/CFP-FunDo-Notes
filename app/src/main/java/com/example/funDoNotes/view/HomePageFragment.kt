@@ -1,4 +1,4 @@
-package com.example.FunDoNotes.view
+package com.example.funDoNotes.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,7 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 
-class HomePageFragment : Fragment() {
+class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
     private lateinit var floatingActionBtn : FloatingActionButton
 

@@ -1,4 +1,4 @@
-package com.example.FunDoNotes.view
+package com.example.funDoNotes.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

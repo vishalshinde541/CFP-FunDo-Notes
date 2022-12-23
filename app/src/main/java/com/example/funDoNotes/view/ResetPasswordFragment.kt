@@ -1,4 +1,4 @@
-package com.example.FunDoNotes.view
+package com.example.funDoNotes.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle

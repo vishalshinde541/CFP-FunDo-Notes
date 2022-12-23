@@ -1,4 +1,4 @@
-package com.example.FunDoNotes.view
+package com.example.funDoNotes.view
 
 import android.app.Activity
 import android.os.Bundle
@@ -17,10 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.FunDoNotes.model.User
-import com.example.FunDoNotes.model.UserAuthService
-import com.example.FunDoNotes.viewmodel.LoginViewModelFactory
-import com.example.FunDoNotes.viewmodel.LoginVieweModel
+import com.example.funDoNotes.model.User
+import com.example.funDoNotes.model.UserAuthService
+import com.example.funDoNotes.viewmodel.LoginViewModelFactory
+import com.example.funDoNotes.viewmodel.LoginVieweModel
 import com.example.loginandregistrationwithfragment.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

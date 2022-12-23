@@ -1,11 +1,11 @@
-package com.example.FunDoNotes.viewmodel
+package com.example.funDoNotes.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.FunDoNotes.model.AuthListener
-import com.example.FunDoNotes.model.User
-import com.example.FunDoNotes.model.UserAuthService
+import com.example.funDoNotes.model.AuthListener
+import com.example.funDoNotes.model.User
+import com.example.funDoNotes.model.UserAuthService
 
 class LoginVieweModel(var userAuthService: UserAuthService): ViewModel() {
 

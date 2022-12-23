@@ -1,4 +1,4 @@
-package com.example.FunDoNotes.view
+package com.example.funDoNotes.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -15,10 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.FunDoNotes.model.User
-import com.example.FunDoNotes.model.UserAuthService
-import com.example.FunDoNotes.viewmodel.RegisterViewModel
-import com.example.FunDoNotes.viewmodel.RegisterViewModelFactory
+import com.example.funDoNotes.model.User
+import com.example.funDoNotes.model.UserAuthService
+import com.example.funDoNotes.viewmodel.*
 import com.example.loginandregistrationwithfragment.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -26,8 +25,6 @@ import com.google.firebase.ktx.Firebase
 
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
-
-
 
     private lateinit var registerViewModel: RegisterViewModel
     private lateinit var etEmail: EditText
@@ -40,11 +37,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private lateinit var firebaseAuth: FirebaseAuth
 
     private var database = Firebase.firestore
-
-    private lateinit var sEmail: String
-    private lateinit var sFirstName: String
-    private lateinit var sLastName: String
-    private lateinit var sPassword: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +66,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         firstname = view.findViewById(R.id.firstname)
         lastname = view.findViewById(R.id.lasttname)
 
+
+
         tvLogin.setOnClickListener {
             val fragment = LoginFragment()
             val transaction = fragmentManager?.beginTransaction()
@@ -81,52 +75,25 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
 
         registerBtn.setOnClickListener {
-            saveData()
             validateEmptyField()
         }
 
         return view
     }
 
-    private fun saveData() {
-
-        sEmail = etEmail.text.toString().trim()
-        sFirstName = firstname.text.toString().trim()
-        sLastName = lastname.text.toString().trim()
-        sPassword = setpassword.text.toString().trim()
-
-        val userMap = hashMapOf(
-            "email" to sEmail,
-            "fristName" to sFirstName,
-            "lastName" to sLastName,
-            "password" to sPassword
-        )
-
-        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-
-        database.collection("user").document(userId).set(userMap)
-            .addOnSuccessListener {
-                Toast.makeText(context,"Successfully added", Toast.LENGTH_SHORT).show()
-                etEmail.text.clear()
-                firstname.text.clear()
-                lastname.text.clear()
-                setpassword.text.clear()
-            }
-            .addOnFailureListener {
-                Toast.makeText(context,"Failed to add", Toast.LENGTH_SHORT).show()
-            }
-
-    }
 
 
-    private fun firbaseSugnUp() {
+    private fun firbaseSignUp() {
         registerBtn.isEnabled = false
         registerBtn.alpha = 0.5f
 
-        var user = User(
+        val user = User(
             email = etEmail.text.toString(),
             password = setpassword.text.toString(),
+            firstName = firstname.text.toString(),
+            lastName = lastname.text.toString(),
             username = ""
+
         )
         registerViewModel.registerUSer(user)
         registerViewModel._userRegisterStatus.observe(viewLifecycleOwner, Observer {
@@ -175,7 +142,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 if (etEmail.text.toString().matches(Regex("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"))) {
                     if (setpassword.text.toString().length >= 5) {
                         if (setpassword.text.toString() == cnfpassword.text.toString()) {
-                            firbaseSugnUp()
+                            firbaseSignUp()
                             Toast.makeText(
                                 requireContext(),
                                 "Register Successful",

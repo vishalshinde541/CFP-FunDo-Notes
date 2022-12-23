@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.FunDoNotes">
+    package="com.example.funDoNotes">
     
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -17,7 +17,7 @@
         android:theme="@style/Theme.LoginAndRegistrationWithFragment"
         tools:targetApi="31">
         <activity
-            android:name="com.example.FunDoNotes.view.SplashActivity"
+            android:name="com.example.funDoNotes.view.SplashActivity"
             android:exported="true"
             tools:ignore="MissingClass">
             <intent-filter>
@@ -30,7 +30,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name="com.example.FunDoNotes.MainActivity"
+            android:name="com.example.funDoNotes.MainActivity"
             android:exported="true">
 
             <meta-data

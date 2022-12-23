@@ -1,10 +1,10 @@
-package com.example.FunDoNotes.view
+package com.example.funDoNotes.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import com.example.FunDoNotes.MainActivity
+import com.example.funDoNotes.MainActivity
 import com.example.loginandregistrationwithfragment.R
 
 

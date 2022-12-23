@@ -1,4 +1,4 @@
-package com.example.FunDoNotes
+package com.example.funDoNotes
 
 import org.junit.Test
 

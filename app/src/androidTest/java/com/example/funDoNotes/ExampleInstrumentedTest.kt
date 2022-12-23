@@ -1,4 +1,4 @@
-package com.example.FunDoNotes
+package com.example.funDoNotes
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
