@@ -12,7 +12,7 @@ class ProfileViewModel(var userAuthService: UserAuthService): ViewModel() {
     val _userFetchDataStatus: LiveData<UserAuthListener> = userFetchDataStatus
 
 
-    fun fetchUserData(user: User) {
+    fun fetchUserData() {
         userAuthService.fetchUserInfo{
             userFetchDataStatus.value = it
         }

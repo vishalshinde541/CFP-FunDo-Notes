@@ -77,7 +77,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_deleted -> replaceFragment(DeleteFragment(), it.title.toString())
                 R.id.nav_setting -> replaceFragment(SettingFragment(), it.title.toString())
                 R.id.nav_helpFeedback -> Toast.makeText(applicationContext,"clicked Help and feedback", Toast.LENGTH_SHORT).show()
-                R.id.nav_login -> replaceFragment(LoginFragment(), it.title.toString())
                 R.id.nav_logOut -> replaceFragment(LoginFragment(), it.title.toString())
                 R.id.nav_share -> Toast.makeText(applicationContext,"clicked Share", Toast.LENGTH_SHORT).show()
                 R.id.nav_rateus -> Toast.makeText(applicationContext,"clicked Rate us", Toast.LENGTH_SHORT).show()

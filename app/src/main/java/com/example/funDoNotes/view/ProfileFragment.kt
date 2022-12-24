@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import com.example.funDoNotes.model.User
 import com.example.funDoNotes.viewmodel.ProfileViewModel
 import com.example.loginandregistrationwithfragment.R
@@ -26,6 +27,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var showFName: TextView
     private lateinit var showLName: TextView
     private lateinit var showEmail: TextView
+
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,17 +52,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         showEmail = view.findViewById(R.id.profile_tvEmail)
 
 
-        val user = User(
-            email = showEmail.text.toString(),
-            firstName = showFName.text.toString(),
-            lastName = showLName.text.toString(),
-        )
 
-        profileViewModel.fetchUserData(user)
+        profileViewModel.fetchUserData()
         profileViewModel._userFetchDataStatus.observe(viewLifecycleOwner, Observer
         {
-            showEmail.text =  it.user.email.toString()
-            showFName.text = it.user.firstName.toString()
+            if (it.status){
+
+                Toast.makeText(requireContext(), it.message,Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), it.message,Toast.LENGTH_SHORT).show()
+            }
             })
 
         return view

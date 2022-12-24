@@ -6,7 +6,7 @@
     android:layout_marginTop="60dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@drawable/register_fragment"
+    android:background="@drawable/profile_background"
     tools:context="com.example.funDoNotes.view.ProfileFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -27,7 +27,7 @@
             android:text="First name"
             android:textStyle="bold"
             android:textSize="25sp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:layout_gravity="center"
             android:layout_margin="5dp"/>
 
@@ -38,7 +38,7 @@
             android:text="Last name"
             android:textStyle="bold"
             android:textSize="25sp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:layout_gravity="center"
             android:layout_margin="5dp"/>
 
@@ -48,7 +48,7 @@
             android:id="@+id/profile_tvEmail"
             android:text="Email"
             android:textSize="20sp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:layout_gravity="center"
             android:layout_margin="5dp"/>
 

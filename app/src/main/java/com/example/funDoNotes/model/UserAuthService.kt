@@ -1,26 +1,21 @@
 package com.example.funDoNotes.model
 
-import android.annotation.SuppressLint
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class UserAuthService {
 
-    private lateinit var sEmail: String
-    private lateinit var sFirstName: String
-    private lateinit var sLastName: String
-    private lateinit var sPassword: String
-
-    private var database = Firebase.firestore
+    private lateinit var database: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
+
     init {
         initService()
     }
 
     private fun initService() {
-
         firebaseAuth = FirebaseAuth.getInstance()
+        database = FirebaseFirestore.getInstance()
     }
 
     fun userRegister(user: User, listener: (AuthListener)->Unit){
@@ -71,29 +66,20 @@ class UserAuthService {
             }
     }
 
-    @SuppressLint("SuspiciousIndentation")
+
     fun fetchUserInfo(listener: (UserAuthListener)-> Unit){
-
-        val uid = firebaseAuth.currentUser?.uid
-
-        var user = User(
-            "",
-            "",
-            "",
-            ""
-
-        )
-        val docref = database.collection("user").document("uid")
+        var uid = firebaseAuth.currentUser?.uid.toString()
+        val docref = database.collection("user").document(uid)
             docref.get().addOnCompleteListener {
             if (it.isSuccessful){
-                 user = User(
+                val user = User(
                      it.result.getString("email").toString(),
                      it.result.getString("firstName").toString(),
                      it.result.getString("lastName").toString()
                      )
                 listener(UserAuthListener(true, "Data fetch successfully", user))
             }else{
-                listener(UserAuthListener(false, "Data fetch filed", user))
+                listener(UserAuthListener(false, "Data fetch filed", null))
             }
         }
     }

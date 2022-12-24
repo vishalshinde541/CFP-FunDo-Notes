@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private lateinit var registerViewModel: RegisterViewModel
@@ -37,7 +36,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private lateinit var firebaseAuth: FirebaseAuth
 
     private var database = Firebase.firestore
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,8 +64,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         firstname = view.findViewById(R.id.firstname)
         lastname = view.findViewById(R.id.lasttname)
 
-
-
         tvLogin.setOnClickListener {
             val fragment = LoginFragment()
             val transaction = fragmentManager?.beginTransaction()
@@ -77,11 +73,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         registerBtn.setOnClickListener {
             validateEmptyField()
         }
-
         return view
     }
-
-
 
     private fun firbaseSignUp() {
         registerBtn.isEnabled = false
@@ -93,7 +86,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             firstName = firstname.text.toString(),
             lastName = lastname.text.toString(),
             username = ""
-
         )
         registerViewModel.registerUSer(user)
         registerViewModel._userRegisterStatus.observe(viewLifecycleOwner, Observer {
