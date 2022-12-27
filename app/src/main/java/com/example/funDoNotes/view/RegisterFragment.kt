@@ -102,7 +102,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         })
     }
 
-    @SuppressLint("SuspiciousIndentation")
     private fun validateEmptyField() {
         val icon =
             AppCompatResources.getDrawable(requireContext(), R.drawable.ic_baseline_warning_24)

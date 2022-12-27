@@ -1,0 +1,68 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context="com.example.funDoNotes.view.DialogProfileFragment">
+
+   <RelativeLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+
+       <Button
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/dialog_dismissBtn"
+           android:text="Close"
+           android:layout_alignParentEnd="true"
+           android:backgroundTint="@color/design_default_color_secondary"
+           android:layout_margin="10dp"/>
+
+       <de.hdodenhof.circleimageview.CircleImageView
+           android:layout_width="120dp"
+           android:layout_height="120dp"
+           android:id="@+id/dialog_circularProfilePic"
+           android:layout_below="@+id/dialog_dismissBtn"
+           android:layout_centerHorizontal="true"
+           android:layout_margin="15dp"
+           android:foregroundGravity="center"
+           android:src="@drawable/user_profile_pic" />
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/dialog_fname"
+           android:layout_below="@+id/dialog_circularProfilePic"
+           android:text="First name"
+           android:textSize="25sp"
+           android:textColor="#2193F3"
+           android:layout_gravity="center"
+           android:layout_centerHorizontal="true"
+           android:layout_margin="8dp"/>
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/dialog_lname"
+           android:layout_below="@+id/dialog_fname"
+           android:text="Last name"
+           android:textSize="25sp"
+           android:textColor="#2193F3"
+           android:layout_gravity="center"
+           android:layout_centerHorizontal="true"
+           android:layout_margin="8dp"/>
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/dialog_email"
+           android:layout_below="@+id/dialog_lname"
+           android:text="Email"
+           android:textSize="20sp"
+           android:textColor="#2193F3"
+           android:layout_gravity="center"
+           android:layout_centerHorizontal="true"
+           android:layout_margin="8dp"/>
+
+   </RelativeLayout>
+
+</RelativeLayout>

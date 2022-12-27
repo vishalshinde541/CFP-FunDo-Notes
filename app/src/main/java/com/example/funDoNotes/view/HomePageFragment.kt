@@ -31,6 +31,9 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         floatingActionBtn = view.findViewById(R.id.floatingActionBtn)
 
         floatingActionBtn.setOnClickListener {
+            val fragment = CreateNewNoteFragment()
+            val transaction = fragmentManager?.beginTransaction()
+            transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
 
             Toast.makeText(context, "Floating Action Btn clicked", Toast.LENGTH_SHORT).show()
         }
