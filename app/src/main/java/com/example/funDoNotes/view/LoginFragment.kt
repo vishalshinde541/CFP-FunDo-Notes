@@ -100,7 +100,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result ->
         if (result.resultCode == Activity.RESULT_OK){
-
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             val fragment = HomePageFragment()
             val transaction = fragmentManager?.beginTransaction()

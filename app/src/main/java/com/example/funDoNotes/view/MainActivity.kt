@@ -38,15 +38,15 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().replace(R.id.fragmentsContainer, LoginFragment()).commit()
         val currentUser = fAuth.currentUser
-//        if (currentUser != null){
-//            val addToBackStack = supportFragmentManager.beginTransaction()
-//                .replace(R.id.fragmentsContainer, HomePageFragment()).addToBackStack(null)
-//                .commit()
-//        }else{
-//            supportFragmentManager.beginTransaction()
-//                .add(R.id.fragmentsContainer, LoginFragment())
-//                .commit()
-//        }
+        if (currentUser != null){
+            val addToBackStack = supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentsContainer, HomePageFragment()).addToBackStack(null)
+                .commit()
+        }else{
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragmentsContainer, LoginFragment())
+                .commit()
+        }
 
         // Navigation Drawer
         drawerLayout = findViewById(R.id.drawerLayout)
@@ -62,6 +62,11 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        fun signOut(){
+            fAuth.signOut()
+            replaceFragment(LoginFragment(), title.toString())
+        }
+
         navView.setNavigationItemSelectedListener {
             it.isChecked = true
             when(it.itemId){
@@ -73,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_deleted -> replaceFragment(DeleteFragment(), it.title.toString())
                 R.id.nav_setting -> replaceFragment(SettingFragment(), it.title.toString())
                 R.id.nav_helpFeedback -> Toast.makeText(applicationContext,"clicked Help and feedback", Toast.LENGTH_SHORT).show()
-                R.id.nav_logOut -> replaceFragment(LoginFragment(), it.title.toString())
+                R.id.nav_logOut -> signOut()
                 R.id.nav_share -> Toast.makeText(applicationContext,"clicked Share", Toast.LENGTH_SHORT).show()
                 R.id.nav_rateus -> Toast.makeText(applicationContext,"clicked Rate us", Toast.LENGTH_SHORT).show()
             }

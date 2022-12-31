@@ -6,7 +6,8 @@
 
    <RelativeLayout
        android:layout_width="wrap_content"
-       android:layout_height="wrap_content">
+       android:layout_height="wrap_content"
+       android:background="#656560">
 
        <Button
            android:layout_width="wrap_content"
@@ -34,9 +35,8 @@
            android:layout_below="@+id/dialog_circularProfilePic"
            android:text="First name"
            android:textSize="25sp"
-           android:textColor="#2193F3"
-           android:layout_gravity="center"
-           android:layout_centerHorizontal="true"
+           android:textColor="@color/white"
+           android:textAlignment="center"
            android:layout_margin="8dp"/>
 
        <TextView
@@ -46,9 +46,8 @@
            android:layout_below="@+id/dialog_fname"
            android:text="Last name"
            android:textSize="25sp"
-           android:textColor="#2193F3"
-           android:layout_gravity="center"
-           android:layout_centerHorizontal="true"
+           android:textColor="@color/white"
+           android:textAlignment="center"
            android:layout_margin="8dp"/>
 
        <TextView
@@ -58,9 +57,8 @@
            android:layout_below="@+id/dialog_lname"
            android:text="Email"
            android:textSize="20sp"
-           android:textColor="#2193F3"
-           android:layout_gravity="center"
-           android:layout_centerHorizontal="true"
+           android:textColor="@color/white"
+           android:textAlignment="center"
            android:layout_margin="8dp"/>
 
    </RelativeLayout>

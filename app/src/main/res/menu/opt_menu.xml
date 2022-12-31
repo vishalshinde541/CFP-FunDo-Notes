@@ -12,7 +12,6 @@
         android:id="@+id/opt_profile_Image"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="profile"
-        app:showAsAction="always"
-        android:actionLayout="@layout/profile_menu_layout"/>
+        app:showAsAction="always" />
 
 </menu>

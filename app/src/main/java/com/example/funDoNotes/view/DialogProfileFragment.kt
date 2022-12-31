@@ -57,23 +57,21 @@ class DialogProfileFragment : DialogFragment() {
     }
 
     private fun readFirestoreData() {
-        val docRef = db.collection("user").document(firebaseAuth.currentUser?.uid!!)
+        userId = firebaseAuth.currentUser?.uid!!
+        val docRef = db.collection("user").document(userId)
         docRef.get()
-              .addOnSuccessListener { document ->
-                if (document != null) {
-                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+              .addOnCompleteListener {
+                if (it.isSuccessful) {
 
-                    fName.text = document.getString("firstName")
-                    lName.text = document.getString("lastName")
-                    email.text = document.getString("email")
+                    fName.text = it.result.getString("firstName")
+                    lName.text = it.result.getString("lastName")
+                    email.text = it.result.getString("email")
 
                 } else {
                     Log.d(TAG, "No such document")
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
+
     }
 
     companion object {

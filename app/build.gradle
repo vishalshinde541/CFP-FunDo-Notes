@@ -63,4 +63,8 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.google.firebase:firebase-database-ktx'
 
+    //noinspection GradleCompatible
+    implementation 'com.android.support:recyclerview-v7:27.0.0'
+
+
 }

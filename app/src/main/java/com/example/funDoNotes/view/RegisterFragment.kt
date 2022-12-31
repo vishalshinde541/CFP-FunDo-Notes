@@ -103,9 +103,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun validateEmptyField() {
-        val icon =
-            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_baseline_warning_24)
-            icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
+        val icon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_baseline_warning_24)
+         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
         when {
             TextUtils.isEmpty(etEmail.text.toString().trim()) -> {
