@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuItemCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.funDoNotes.model.NoteAdapter
 import com.example.funDoNotes.view.*
 import com.example.funDoNotes.view.LoginFragment
 import com.example.loginandregistrationwithfragment.R
@@ -83,13 +84,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_rateus -> Toast.makeText(applicationContext,"clicked Rate us", Toast.LENGTH_SHORT).show()
             }
             true
-        }
-
-        fun onOptionsItemSelected(item: MenuItem): Boolean {
-            if (toggle.onOptionsItemSelected(item)){
-                true
-            }
-            return super.onOptionsItemSelected(item)
         }
 
     }

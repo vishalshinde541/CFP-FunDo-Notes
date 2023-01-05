@@ -1,9 +1,6 @@
 package com.example.funDoNotes.model
 
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 class NoteService {
@@ -20,14 +17,25 @@ class NoteService {
         database = FirebaseFirestore.getInstance()
     }
 
-    fun saveNoteToFirebase(note: Note,  listener: (AuthListener)-> Unit) {
+    fun saveNoteToFirebase(note: Note, listener: (AuthListener) -> Unit) {
         var currentUserId = firebaseAuth.currentUser?.uid!!
-         database.collection("user").document(currentUserId).collection("my_notes")
-        .document().set(note)
+
+        note.noteId = database.collection("user").document(currentUserId)
+            .collection("my_notes").document().id.toString()
+
+        val noteMap = hashMapOf(
+            "title" to note.title,
+            "subtitle" to note.subtitle,
+            "content" to note.content,
+            "timestamp" to note.timestamp,
+            "noteId" to note.noteId
+        )
+        database.collection("user").document(currentUserId).collection("my_notes")
+            .document(note.noteId).set(noteMap)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     listener(AuthListener(true, "Note added successfully"))
-                }else{
+                } else {
                     listener(AuthListener(false, "Failed adding notes"))
                 }
             }

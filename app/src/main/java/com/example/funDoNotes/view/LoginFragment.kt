@@ -82,7 +82,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         tvNewRegister.setOnClickListener {
             val fragment = RegisterFragment()
             val transaction = fragmentManager?.beginTransaction()
-            transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
+            transaction?.add(R.id.fragmentsContainer, fragment)?.commit()
         }
 
         loginBtn.setOnClickListener {

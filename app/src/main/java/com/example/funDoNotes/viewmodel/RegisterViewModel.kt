@@ -18,4 +18,4 @@ class RegisterViewModel(var userAuthService: UserAuthService): ViewModel() {
         })
     }
 
-}
+    }

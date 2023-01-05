@@ -13,9 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.funDoNotes.model.Note
 import com.example.funDoNotes.model.NoteService
-import com.example.funDoNotes.model.UserAuthService
-import com.example.funDoNotes.viewmodel.RegisterViewModel
-import com.example.funDoNotes.viewmodel.RegisterViewModelFactory
 import com.example.funDoNotes.viewmodel.SaveNoteViewModel
 import com.example.funDoNotes.viewmodel.SaveNoteViewModelFactory
 import com.example.loginandregistrationwithfragment.R
@@ -34,7 +31,8 @@ class CreateNewNoteFragment : Fragment() {
     private lateinit var titleEditText: EditText
     private lateinit var subTitleEditText: EditText
     private lateinit var contentEditText: EditText
-//    private lateinit var timestamp: Timestamp
+
+    //    private lateinit var timestamp: Timestamp
     private lateinit var backImageButton: ImageButton
     private lateinit var saveNoteButton: FloatingActionButton
 
@@ -55,7 +53,7 @@ class CreateNewNoteFragment : Fragment() {
     ): View? {
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_create_new_note, container, false)
+        val view = inflater.inflate(R.layout.fragment_create_new_note, container, false)
 
         titleEditText = view.findViewById(R.id.addNote_titleText)
         subTitleEditText = view.findViewById(R.id.addNote_SubtitleText)
@@ -71,7 +69,6 @@ class CreateNewNoteFragment : Fragment() {
         }
 
         backImageButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Clicked on back button", Toast.LENGTH_SHORT).show()
             val fragment = HomePageFragment()
             val transaction = fragmentManager?.beginTransaction()
             transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
@@ -81,11 +78,12 @@ class CreateNewNoteFragment : Fragment() {
     }
 
     private fun saveNote() {
-        var noteTitle : String = titleEditText.text.toString()
-        var noteSubTitle : String = subTitleEditText.text.toString()
-        var noteContent : String = contentEditText.text.toString()
+        var noteTitle: String = titleEditText.text.toString()
+        var noteSubTitle: String = subTitleEditText.text.toString()
+        var noteContent: String = contentEditText.text.toString()
+
 //        var timestamp: String = timestamp.toString()
-        if (noteTitle == null || noteTitle.isEmpty()){
+        if (noteTitle == null || noteTitle.isEmpty()) {
             titleEditText.setError("Title is required")
         }
         var note = Note(noteTitle, noteSubTitle, noteContent, Timestamp.now())
@@ -98,14 +96,13 @@ class CreateNewNoteFragment : Fragment() {
                 val fragment = HomePageFragment()
                 val transaction = fragmentManager?.beginTransaction()
                 transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
-            }else{
+            } else {
                 Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
             }
         })
 
 
     }
-
 
 
 }

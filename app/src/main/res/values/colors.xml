@@ -10,4 +10,12 @@
     <color name="red">#F44336</color>
     <color name="seperateLine">#B3A6A6</color>
     <color name="resetPasswordText">#D1F0EC</color>
+
+    <color name="NoteColour1">#65FAFA</color>
+    <color name="NoteColour2">#40C4FF</color>
+    <color name="NoteColour3">#EEFF41</color>
+    <color name="NoteColour4">#FF5252</color>
+    <color name="NoteColour5">#77EC7C</color>
+    <color name="NoteColour6">#E040FB</color>
+
 </resources>

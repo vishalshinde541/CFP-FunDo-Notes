@@ -7,7 +7,7 @@
    <RelativeLayout
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:background="#656560">
+       android:background="#83F0F4">
 
        <Button
            android:layout_width="wrap_content"
@@ -15,7 +15,7 @@
            android:id="@+id/dialog_dismissBtn"
            android:text="Close"
            android:layout_alignParentEnd="true"
-           android:backgroundTint="@color/design_default_color_secondary"
+           android:backgroundTint="@color/purple_500"
            android:layout_margin="10dp"/>
 
        <de.hdodenhof.circleimageview.CircleImageView
@@ -29,15 +29,18 @@
            android:src="@drawable/user_profile_pic" />
 
        <TextView
+           android:id="@+id/dialog_fname"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:id="@+id/dialog_fname"
            android:layout_below="@+id/dialog_circularProfilePic"
+           android:layout_marginStart="8dp"
+           android:layout_marginTop="8dp"
+           android:layout_marginEnd="8dp"
+           android:layout_marginBottom="8dp"
            android:text="First name"
-           android:textSize="25sp"
-           android:textColor="@color/white"
            android:textAlignment="center"
-           android:layout_margin="8dp"/>
+           android:textColor="@color/black"
+           android:textSize="25sp" />
 
        <TextView
            android:layout_width="match_parent"
@@ -46,20 +49,23 @@
            android:layout_below="@+id/dialog_fname"
            android:text="Last name"
            android:textSize="25sp"
-           android:textColor="@color/white"
+           android:textColor="@color/black"
            android:textAlignment="center"
            android:layout_margin="8dp"/>
 
        <TextView
+           android:id="@+id/dialog_email"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:id="@+id/dialog_email"
            android:layout_below="@+id/dialog_lname"
+           android:layout_marginStart="8dp"
+           android:layout_marginTop="8dp"
+           android:layout_marginEnd="8dp"
+           android:layout_marginBottom="8dp"
            android:text="Email"
-           android:textSize="20sp"
-           android:textColor="@color/white"
            android:textAlignment="center"
-           android:layout_margin="8dp"/>
+           android:textColor="@color/black"
+           android:textSize="20sp" />
 
    </RelativeLayout>
 

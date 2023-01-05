@@ -6,12 +6,12 @@
     android:id="@+id/notes_container"
     android:layout_margin="10dp"
     android:elevation="8dp"
-    app:cardCornerRadius="10dp"
-    android:backgroundTint="@color/purple_200">
+    app:cardCornerRadius="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/ll_ViewRow"
         android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -46,6 +46,29 @@
                 android:scrollHorizontally="true"
                 android:padding="8dp"/>
 
+<!--            <TextView-->
+<!--                android:id="@+id/textViewOptions"-->
+<!--                android:layout_width="25dp"-->
+<!--                android:layout_height="25dp"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:layout_alignParentTop="true"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:text="&#8942;"-->
+<!--                android:textAppearance="?android:textAppearanceLarge" />-->
+<!--            -->
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/menuImageBtn"
+                android:src="@drawable/ic_note_menu_icon"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:layout_marginEnd="8dp"/>
+
+
         </RelativeLayout>
         <TextView
             android:layout_width="match_parent"
@@ -75,7 +98,10 @@
             android:maxLines="10"
             android:padding="8dp"/>
 
-        
+
     </LinearLayout>
+
+
+
 
 </androidx.cardview.widget.CardView>

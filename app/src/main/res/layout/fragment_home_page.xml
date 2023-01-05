@@ -7,13 +7,10 @@
     android:background="@color/white"
     tools:context="com.example.funDoNotes.view.HomePageFragment">
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp">
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
@@ -25,7 +22,6 @@
 
     </LinearLayout>
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,6 +30,5 @@
        android:layout_margin="40dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"/>
-
 
 </RelativeLayout>

@@ -9,11 +9,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import com.example.funDoNotes.model.User
 import com.example.loginandregistrationwithfragment.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_register.*
 
 class DialogProfileFragment : DialogFragment() {
 
@@ -26,7 +24,6 @@ class DialogProfileFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -46,7 +43,7 @@ class DialogProfileFragment : DialogFragment() {
 
         readFirestoreData()
 
-        closeBtn.setOnClickListener(object: View.OnClickListener{
+        closeBtn.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 dismiss()
             }
@@ -60,7 +57,7 @@ class DialogProfileFragment : DialogFragment() {
         userId = firebaseAuth.currentUser?.uid!!
         val docRef = db.collection("user").document(userId)
         docRef.get()
-              .addOnCompleteListener {
+            .addOnCompleteListener {
                 if (it.isSuccessful) {
 
                     fName.text = it.result.getString("firstName")
