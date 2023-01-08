@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var  navView : NavigationView
     lateinit var toolbar: Toolbar
     lateinit var binding: ActivityMainBinding
-    private lateinit var profileBtn: Button
     private lateinit var fAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,12 +116,8 @@ class MainActivity : AppCompatActivity() {
             return true
         }else if (
             return when(item.itemId){
-                R.id.opt_search -> {
-                    Toast.makeText(this,"Clicked on search", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.opt_profile_Image -> {
 
+                R.id.opt_profile_Image -> {
                     addFragment()
                     Toast.makeText(this,"Clicked on profile", Toast.LENGTH_SHORT).show()
                     true

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white"
     tools:context="com.example.funDoNotes.view.HomePageFragment">
@@ -17,6 +18,7 @@
         android:layout_height="match_parent"
         android:id="@+id/recycler_home"
         android:layout_marginTop="100dp"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         tools:listitem="@layout/notes_list_view"
         android:layout_margin="8dp"/>
 

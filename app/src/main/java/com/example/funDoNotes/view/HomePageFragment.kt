@@ -5,29 +5,42 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.funDoNotes.model.Note
 import com.example.funDoNotes.model.NoteAdapter
 import com.example.loginandregistrationwithfragment.R
+import com.example.loginandregistrationwithfragment.databinding.FragmentHomePageBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
 import kotlin.collections.ArrayList
 
 
 class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
+    private lateinit var binding: FragmentHomePageBinding
     private lateinit var floatingActionBtn: FloatingActionButton
     private lateinit var recyclerView: RecyclerView
     private lateinit var noteList: ArrayList<Note>
 
-    //    private lateinit var tempArrayList: ArrayList<Note>
+    private lateinit var tempArrayList: ArrayList<Note>
     private lateinit var db: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
 
+    private val LIST_VIEW = "LIST_VIEW"
+    private val GRID_VIEW = "GRID_VIEW"
+    var currentView = "GRID_VIEW"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = FragmentHomePageBinding.inflate(layoutInflater)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -41,10 +54,11 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         firebaseAuth = FirebaseAuth.getInstance()
         floatingActionBtn = view.findViewById(R.id.floatingActionBtn)
         recyclerView = view.findViewById(R.id.recycler_home)
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = staggeredGridLayoutManager
 
         noteList = arrayListOf<Note>()
-//        tempArrayList = arrayListOf<Note>()
+        tempArrayList = arrayListOf<Note>()
 
         db = FirebaseFirestore.getInstance()
         db.collection("user").document(firebaseAuth.currentUser?.uid.toString())
@@ -58,8 +72,8 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
                             noteList.add(note)
                         }
                     }
-//                    tempArrayList.addAll(noteList)
-                    recyclerView.adapter = NoteAdapter(requireContext(), noteList)
+                    tempArrayList.addAll(noteList)
+                    recyclerView.adapter = NoteAdapter(requireContext(), tempArrayList)
 
                     noteList.sortByDescending {
                         it.timestamp
@@ -81,5 +95,118 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         return view
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+            R.id.opt_switchView -> {
+
+                if (currentView == GRID_VIEW) {
+                    listView()
+                } else {
+                    gridView()
+                }
+                true
+            }
+            R.id.opt_search -> {
+                Toast.makeText(requireContext(), "Clicked on search", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.homepage_opt_menu, menu)
+
+        val item = menu.findItem(R.id.opt_search)
+        val searchView = item?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                val searchText = newText!!.toLowerCase(Locale.getDefault())
+
+                if (searchText.isNotEmpty()) {
+
+                    noteList.forEach {
+                        if (it.title?.toLowerCase(Locale.getDefault())?.contains(searchText) == true ||
+                            it.subtitle?.toLowerCase(Locale.getDefault())?.contains(searchText) == true ||
+                            it.content?.toLowerCase(Locale.getDefault())?.contains(searchText) == true) {
+
+                            tempArrayList.add(it)
+                        }
+                    }
+                    recyclerView.adapter!!.notifyDataSetChanged()
+                } else {
+
+                    tempArrayList.clear()
+                    tempArrayList.addAll(noteList)
+                    recyclerView.adapter!!.notifyDataSetChanged()
+                }
+
+                return false
+            }
+
+        })
+
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+
+        val item = menu.findItem(R.id.opt_switchView)
+        when (currentView) {
+            LIST_VIEW -> {
+                item.setIcon(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_baseline_grid_view_24
+                    )
+                )
+                true
+            }
+            GRID_VIEW -> {
+                item.setIcon(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_baseline_linear_view_24
+                    )
+                )
+                true
+            }
+
+        }
+        return super.onPrepareOptionsMenu(menu)
+//        if (currentView == GRID_VIEW) {
+//            item.icon = ContextCompat.getDrawable(
+//                requireContext(),
+//                R.drawable.ic_baseline_linear_view_24
+//            )
+//        } else if(currentView == LIST_VIEW) {
+//            item.icon = ContextCompat.getDrawable(
+//                requireContext(),
+//                R.drawable.ic_baseline_grid_view_24
+//            )
+//
+//        }
+
+    }
+
+    private fun listView() {
+        currentView = LIST_VIEW
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = NoteAdapter(requireContext(), noteList)
+    }
+
+
+    private fun gridView() {
+        currentView = GRID_VIEW
+        val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = staggeredGridLayoutManager
+        recyclerView.adapter = NoteAdapter(requireContext(), noteList)
+    }
 
 }

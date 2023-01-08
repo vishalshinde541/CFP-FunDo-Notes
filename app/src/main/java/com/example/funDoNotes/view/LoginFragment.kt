@@ -76,7 +76,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         forgotpass.setOnClickListener {
             val fragment = ResetPasswordFragment()
             val transaction = fragmentManager?.beginTransaction()
-            transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
+            transaction?.add(R.id.fragmentsContainer, fragment)?.commit()
         }
 
         tvNewRegister.setOnClickListener {
@@ -122,7 +122,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             if (it.status){
                 val fragment = HomePageFragment()
                 val transaction = fragmentManager?.beginTransaction()
-                transaction?.replace(R.id.fragmentsContainer,fragment)?.commit()
+                transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
             }else{
                 loginBtn.isEnabled = true
                 loginBtn.alpha = 1.0f
