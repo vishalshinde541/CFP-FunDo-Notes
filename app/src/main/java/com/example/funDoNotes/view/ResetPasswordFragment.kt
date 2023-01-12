@@ -37,7 +37,7 @@ class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
         etRegisteredEmail = view.findViewById(R.id.etRegisteredEmail)
 
         resetBtn.setOnClickListener {
-             var setEmail = etRegisteredEmail.text.toString()
+            var setEmail = etRegisteredEmail.text.toString()
             fAuth.sendPasswordResetEmail(setEmail)
                 .addOnSuccessListener {
                     Toast.makeText(context, "Please check you email", Toast.LENGTH_SHORT).show()

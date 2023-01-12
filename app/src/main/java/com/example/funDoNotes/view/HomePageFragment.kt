@@ -28,12 +28,9 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
     private lateinit var floatingActionBtn: FloatingActionButton
     private lateinit var recyclerView: RecyclerView
     private lateinit var noteList: ArrayList<Note>
-
     private lateinit var tempArrayList: ArrayList<Note>
     private lateinit var db: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
-
-    private lateinit var helper: MyDbHelper
 
     private val LIST_VIEW = "LIST_VIEW"
     private val GRID_VIEW = "GRID_VIEW"
@@ -61,7 +58,6 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
         noteList = arrayListOf<Note>()
         tempArrayList = arrayListOf<Note>()
-
 
         db = FirebaseFirestore.getInstance()
         db.collection("user").document(firebaseAuth.currentUser?.uid.toString())
@@ -97,7 +93,6 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
         return view
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 

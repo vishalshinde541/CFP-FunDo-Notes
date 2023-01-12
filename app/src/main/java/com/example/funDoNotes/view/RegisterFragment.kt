@@ -64,9 +64,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         firstname = view.findViewById(R.id.firstname)
         lastname = view.findViewById(R.id.lasttname)
 
-//        var helper = MyDbHelper(requireContext())
-//        var db = helper.readableDatabase
-
         tvLogin.setOnClickListener {
             val fragment = LoginFragment()
             val transaction = fragmentManager?.beginTransaction()

@@ -21,7 +21,6 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-
 class CreateNewNoteFragment : Fragment() {
 
     private lateinit var saveNoteViewModel: SaveNoteViewModel
@@ -32,16 +31,22 @@ class CreateNewNoteFragment : Fragment() {
     private lateinit var subTitleEditText: EditText
     private lateinit var contentEditText: EditText
 
-    //    private lateinit var timestamp: Timestamp
     private lateinit var backImageButton: ImageButton
     private lateinit var saveNoteButton: FloatingActionButton
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         saveNoteViewModel =
-            ViewModelProvider(this, SaveNoteViewModelFactory(NoteService(MyDbHelper(requireContext()), requireContext()))).get(
+            ViewModelProvider(
+                this,
+                SaveNoteViewModelFactory(
+                    NoteService(
+                        MyDbHelper(requireContext()),
+                        requireContext()
+                    )
+                )
+            ).get(
                 SaveNoteViewModel::class.java
             )
     }

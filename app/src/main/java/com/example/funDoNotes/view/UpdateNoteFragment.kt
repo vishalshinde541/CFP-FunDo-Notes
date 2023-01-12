@@ -45,7 +45,7 @@ class UpdateNoteFragment : Fragment() {
         // Receiving data(NoteId) from adapter using Bundle
         val bundle = arguments
         if (bundle != null) {
-             noteId = bundle.getString("NoteId").toString()
+            noteId = bundle.getString("NoteId").toString()
 
         }
 
@@ -57,7 +57,6 @@ class UpdateNoteFragment : Fragment() {
         updateContent = view.findViewById(R.id.updateNote_contentText)
         updateBtn = view.findViewById(R.id.note_updateBtn)
         backBtn = view.findViewById(R.id.updateNote_backBtn)
-
 
 
         backBtn.setOnClickListener {
@@ -75,14 +74,12 @@ class UpdateNoteFragment : Fragment() {
             var noteSubTitle: String = updateSubTitle.text.toString()
             var noteContent: String = updateContent.text.toString()
 
-//        var timestamp: String = timestamp.toString()
             if (noteTitle == null || noteTitle.isEmpty()) {
                 updateTitle.setError("Title is required")
             }
             var note = Note(noteTitle, noteSubTitle, noteContent, Timestamp.now())
 
             var currentUserId = firebaseAuth.currentUser?.uid!!
-
 
             val noteMap = hashMapOf(
                 "title" to note.title,
@@ -117,9 +114,14 @@ class UpdateNoteFragment : Fragment() {
 
                 }
             var helper = MyDbHelper(requireContext())
-            helper.updateData(sqlId, note.title.toString(), note.subtitle.toString(), note.content.toString(), note.timestamp.toString())
+            helper.updateData(
+                sqlId,
+                note.title.toString(),
+                note.subtitle.toString(),
+                note.content.toString(),
+                note.timestamp.toString()
+            )
         }
-
 
         return view
     }

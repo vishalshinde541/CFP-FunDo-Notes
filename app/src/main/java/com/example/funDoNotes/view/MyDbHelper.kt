@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
 
 
-class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class MyDbHelper(var context: Context) :
+    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private val DATABASE_VERSION = 1
@@ -36,8 +37,14 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     }
 
-    fun addNote(noteid : String, title : String, subtitle : String, content : String, timestamp: String){
-        var db : SQLiteDatabase = this.writableDatabase
+    fun addNote(
+        noteid: String,
+        title: String,
+        subtitle: String,
+        content: String,
+        timestamp: String
+    ) {
+        var db: SQLiteDatabase = this.writableDatabase
         var cv = ContentValues()
 
         cv.put(KEY_ID, noteid)
@@ -45,31 +52,36 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cv.put(KEY_SUBTITLE, subtitle)
         cv.put(KEY_CONTENT, content)
         cv.put(KEY_TIMESTAMP, timestamp)
-        var result : Int = db.insert(TABLE_NAME, null, cv).toInt()
+        var result: Int = db.insert(TABLE_NAME, null, cv).toInt()
 
-        if (result == -1){
+        if (result == -1) {
             Toast.makeText(context, "Failed to add to SQLite", Toast.LENGTH_SHORT).show()
-        }else{
+        } else {
             Toast.makeText(context, "Added Successfully!", Toast.LENGTH_SHORT).show()
         }
 
     }
 
-    fun readAllSQLiteData() : android.database.Cursor? {
-        val query : String = "SELECT * FROM " + TABLE_NAME
-        var db : SQLiteDatabase = this.readableDatabase
+    fun readAllSQLiteData(): android.database.Cursor? {
+        val query: String = "SELECT * FROM " + TABLE_NAME
+        var db: SQLiteDatabase = this.readableDatabase
 
-        var cursor : android.database.Cursor? = null
-        if (db != null){
+        var cursor: android.database.Cursor? = null
+        if (db != null) {
             cursor = db.rawQuery(query, null)
         }
         return cursor
     }
 
 
-
-    fun updateData(noteid : String, title: String, subtitle: String, content: String, timestamp: String){
-        var db : SQLiteDatabase = this.writableDatabase
+    fun updateData(
+        noteid: String,
+        title: String,
+        subtitle: String,
+        content: String,
+        timestamp: String
+    ) {
+        var db: SQLiteDatabase = this.writableDatabase
         var cv = ContentValues()
 
         cv.put(KEY_TITLE, title)
@@ -78,21 +90,21 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cv.put(KEY_TIMESTAMP, timestamp)
 
         var result = db.update(TABLE_NAME, cv, KEY_ID + "=?", arrayOf(noteid.toString())).toInt()
-        if (result == -1){
+        if (result == -1) {
             Toast.makeText(context, "Failed to update", Toast.LENGTH_SHORT).show()
-        }else{
+        } else {
             Toast.makeText(context, "Updated Successfully!", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun deleteOneRow(noteid : String){
-        var db : SQLiteDatabase = this.writableDatabase
+    fun deleteOneRow(noteid: String) {
+        var db: SQLiteDatabase = this.writableDatabase
         var cv = ContentValues()
 
         var result = db.delete(TABLE_NAME, KEY_ID + "=?", arrayOf(noteid.toString())).toInt()
-        if (result == -1){
+        if (result == -1) {
             Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show()
-        }else{
+        } else {
             Toast.makeText(context, "Note Deleted!", Toast.LENGTH_SHORT).show()
         }
     }

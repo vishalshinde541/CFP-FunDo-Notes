@@ -1,20 +1,15 @@
 package com.example.funDoNotes.view
 
-import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuItemCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import com.example.funDoNotes.model.NoteAdapter
-import com.example.funDoNotes.view.*
-import com.example.funDoNotes.view.LoginFragment
 import com.example.loginandregistrationwithfragment.R
 import com.example.loginandregistrationwithfragment.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
@@ -36,10 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         fAuth = FirebaseAuth.getInstance()
         val uid = fAuth.currentUser?.uid
-
-//        var helper = MyDbHelper(applicationContext)
-//        var db = helper.readableDatabase
-
 
         supportFragmentManager.beginTransaction().replace(R.id.fragmentsContainer, LoginFragment())
             .commit()

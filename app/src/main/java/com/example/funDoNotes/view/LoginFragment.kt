@@ -36,7 +36,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var gooleBtn: ImageView
     private lateinit var fAuth: FirebaseAuth
 
-    private lateinit var googleSignInClient : GoogleSignInClient
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,8 +54,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_login, container, false)
 
-        val tvNewRegister : TextView = view.findViewById(R.id.tvNewResister)
-        val forgotpass : TextView = view.findViewById(R.id.forgotpass)
+        val tvNewRegister: TextView = view.findViewById(R.id.tvNewResister)
+        val forgotpass: TextView = view.findViewById(R.id.forgotpass)
 
         loginUsername = view.findViewById(R.id.loginUsername)
         loginPassword = view.findViewById(R.id.loginPassword)
@@ -94,22 +94,22 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         return view
     }
 
-    private fun signInGoogle(){
+    private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
         launcher.launch(signInIntent)
     }
 
-    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            result ->
-        if (result.resultCode == Activity.RESULT_OK){
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            val fragment = HomePageFragment()
-            val transaction = fragmentManager?.beginTransaction()
-            transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
+    private val launcher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                val fragment = HomePageFragment()
+                val transaction = fragmentManager?.beginTransaction()
+                transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
+            }
         }
-    }
 
-    private fun firebaseSignIn(){
+    private fun firebaseSignIn() {
         loginBtn.isEnabled = false
         loginBtn.alpha = 0.5f
 
@@ -121,11 +121,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         loginViewModel.loginUser(user)
         loginViewModel._userLoginStatus.observe(viewLifecycleOwner, Observer {
 
-            if (it.status){
+            if (it.status) {
                 val fragment = HomePageFragment()
                 val transaction = fragmentManager?.beginTransaction()
                 transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
-            }else{
+            } else {
                 loginBtn.isEnabled = true
                 loginBtn.alpha = 1.0f
                 Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
@@ -133,24 +133,27 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         })
     }
 
-    private fun validateField(){
-        val icon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_baseline_warning_24)
+    private fun validateField() {
+        val icon =
+            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_baseline_warning_24)
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        when{
-            TextUtils.isEmpty(loginUsername.text.toString().trim())->{
+        when {
+            TextUtils.isEmpty(loginUsername.text.toString().trim()) -> {
                 loginUsername.setError("Please Enter the username", icon)
             }
-            TextUtils.isEmpty(loginPassword.text.toString().trim())->{
+            TextUtils.isEmpty(loginPassword.text.toString().trim()) -> {
                 loginPassword.setError("Please Enter the password", icon)
             }
             loginUsername.text.toString().isNotEmpty() &&
                     loginPassword.text.toString().isNotEmpty() -> {
 
-                if (loginUsername.text.toString().matches(Regex("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"))) {
+                if (loginUsername.text.toString()
+                        .matches(Regex("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"))
+                ) {
                     firebaseSignIn()
                     Toast.makeText(context, "Login Successful", Toast.LENGTH_LONG).show()
-                }else{
+                } else {
                     loginUsername.setError("Please Enter valid Email", icon)
                 }
             }
