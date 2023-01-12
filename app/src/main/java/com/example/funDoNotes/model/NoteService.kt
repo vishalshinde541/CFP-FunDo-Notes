@@ -1,9 +1,11 @@
 package com.example.funDoNotes.model
 
+import android.content.Context
+import com.example.funDoNotes.view.MyDbHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class NoteService {
+class NoteService(private val myDbHelper: MyDbHelper, var context: Context) {
 
     private lateinit var database: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
@@ -18,10 +20,11 @@ class NoteService {
     }
 
     fun saveNoteToFirebase(note: Note, listener: (AuthListener) -> Unit) {
+
         var currentUserId = firebaseAuth.currentUser?.uid!!
 
         note.noteId = database.collection("user").document(currentUserId)
-            .collection("my_notes").document().id.toString()
+            .collection("my_notes").document().id
 
         val noteMap = hashMapOf(
             "title" to note.title,
@@ -30,8 +33,10 @@ class NoteService {
             "timestamp" to note.timestamp,
             "noteId" to note.noteId
         )
+
+        saveNoteToSQLite(note)
         database.collection("user").document(currentUserId).collection("my_notes")
-            .document(note.noteId).set(noteMap)
+            .document(note.noteId!!).set(noteMap)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     listener(AuthListener(true, "Note added successfully"))
@@ -39,6 +44,15 @@ class NoteService {
                     listener(AuthListener(false, "Failed adding notes"))
                 }
             }
+    }
+
+    private fun saveNoteToSQLite(note: Note) {
+        var helper = MyDbHelper(context)
+        helper.addNote(
+            note.noteId.toString(),
+            note.title.toString(), note.subtitle.toString(),
+            note.content.toString(), note.timestamp?.toDate().toString()
+        )
     }
 
 }

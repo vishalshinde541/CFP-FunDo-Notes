@@ -1,5 +1,6 @@
 package com.example.funDoNotes.view
 
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -33,7 +34,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private lateinit var registerBtn: Button
 
     private lateinit var firebaseAuth: FirebaseAuth
-
     private var database = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +42,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             ViewModelProvider(this, RegisterViewModelFactory(UserAuthService())).get(
                 RegisterViewModel::class.java
             )
+
     }
 
     override fun onCreateView(
@@ -62,6 +63,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         registerBtn = view.findViewById(R.id.registerBtn)
         firstname = view.findViewById(R.id.firstname)
         lastname = view.findViewById(R.id.lasttname)
+
+//        var helper = MyDbHelper(requireContext())
+//        var db = helper.readableDatabase
 
         tvLogin.setOnClickListener {
             val fragment = LoginFragment()

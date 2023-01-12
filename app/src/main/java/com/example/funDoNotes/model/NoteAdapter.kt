@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.funDoNotes.view.MyDbHelper
 import com.example.funDoNotes.view.UpdateNoteFragment
 import com.example.loginandregistrationwithfragment.R
 import com.google.firebase.auth.FirebaseAuth
@@ -117,6 +118,9 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
                         }
                     val alert = builder.create()
                     alert.show()
+
+                    var helper = MyDbHelper(context)
+                    helper.deleteOneRow(noteId)
                     true
                 }
                 else -> true

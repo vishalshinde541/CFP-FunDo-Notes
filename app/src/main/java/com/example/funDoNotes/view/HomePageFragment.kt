@@ -33,6 +33,8 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
     private lateinit var db: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
 
+    private lateinit var helper: MyDbHelper
+
     private val LIST_VIEW = "LIST_VIEW"
     private val GRID_VIEW = "GRID_VIEW"
     var currentView = "GRID_VIEW"
@@ -59,6 +61,7 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
         noteList = arrayListOf<Note>()
         tempArrayList = arrayListOf<Note>()
+
 
         db = FirebaseFirestore.getInstance()
         db.collection("user").document(firebaseAuth.currentUser?.uid.toString())
@@ -95,6 +98,7 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         return view
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
@@ -102,8 +106,18 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
                 if (currentView == GRID_VIEW) {
                     listView()
+                    item.icon = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_baseline_grid_view_24
+                    )
+                    currentView = LIST_VIEW
                 } else {
                     gridView()
+                    item.icon = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_baseline_linear_view_24
+                    )
+                    currentView = GRID_VIEW
                 }
                 true
             }
@@ -127,14 +141,18 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
             override fun onQueryTextChange(newText: String?): Boolean {
 
-                val searchText = newText!!.toLowerCase(Locale.getDefault())
+                val searchText = newText!!.lowercase(Locale.getDefault())
 
                 if (searchText.isNotEmpty()) {
 
                     noteList.forEach {
-                        if (it.title?.toLowerCase(Locale.getDefault())?.contains(searchText) == true ||
-                            it.subtitle?.toLowerCase(Locale.getDefault())?.contains(searchText) == true ||
-                            it.content?.toLowerCase(Locale.getDefault())?.contains(searchText) == true) {
+                        if (it.title?.lowercase(Locale.getDefault())
+                                ?.contains(searchText) == true ||
+                            it.subtitle?.lowercase(Locale.getDefault())
+                                ?.contains(searchText) == true ||
+                            it.content?.lowercase(Locale.getDefault())
+                                ?.contains(searchText) == true
+                        ) {
 
                             tempArrayList.add(it)
                         }
@@ -155,52 +173,12 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-
-        val item = menu.findItem(R.id.opt_switchView)
-        when (currentView) {
-            LIST_VIEW -> {
-                item.setIcon(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_baseline_grid_view_24
-                    )
-                )
-                true
-            }
-            GRID_VIEW -> {
-                item.setIcon(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_baseline_linear_view_24
-                    )
-                )
-                true
-            }
-
-        }
-        return super.onPrepareOptionsMenu(menu)
-//        if (currentView == GRID_VIEW) {
-//            item.icon = ContextCompat.getDrawable(
-//                requireContext(),
-//                R.drawable.ic_baseline_linear_view_24
-//            )
-//        } else if(currentView == LIST_VIEW) {
-//            item.icon = ContextCompat.getDrawable(
-//                requireContext(),
-//                R.drawable.ic_baseline_grid_view_24
-//            )
-//
-//        }
-
-    }
-
     private fun listView() {
         currentView = LIST_VIEW
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = NoteAdapter(requireContext(), noteList)
-    }
 
+    }
 
     private fun gridView() {
         currentView = GRID_VIEW

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout"
     android:background="@drawable/background1"
-    tools:context="com.example.funDoNotes.MainActivity">
+    tools:context="com.example.funDoNotes.view.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"

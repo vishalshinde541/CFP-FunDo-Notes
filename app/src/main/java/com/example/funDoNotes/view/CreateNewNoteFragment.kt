@@ -41,11 +41,10 @@ class CreateNewNoteFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         saveNoteViewModel =
-            ViewModelProvider(this, SaveNoteViewModelFactory(NoteService())).get(
+            ViewModelProvider(this, SaveNoteViewModelFactory(NoteService(MyDbHelper(requireContext()), requireContext()))).get(
                 SaveNoteViewModel::class.java
             )
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,12 +60,7 @@ class CreateNewNoteFragment : Fragment() {
         saveNoteButton = view.findViewById(R.id.saveNoteBtn)
         backImageButton = view.findViewById(R.id.backBtn)
 
-        saveNoteButton.setOnClickListener {
-            saveNote()
-            val fragment = HomePageFragment()
-            val transaction = fragmentManager?.beginTransaction()
-            transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
-        }
+        saveNoteToFirestore()
 
         backImageButton.setOnClickListener {
             val fragment = HomePageFragment()
@@ -77,32 +71,33 @@ class CreateNewNoteFragment : Fragment() {
         return view
     }
 
-    private fun saveNote() {
-        var noteTitle: String = titleEditText.text.toString()
-        var noteSubTitle: String = subTitleEditText.text.toString()
-        var noteContent: String = contentEditText.text.toString()
+    private fun saveNoteToFirestore() {
 
-//        var timestamp: String = timestamp.toString()
-        if (noteTitle == null || noteTitle.isEmpty()) {
-            titleEditText.setError("Title is required")
-        }
-        var note = Note(noteTitle, noteSubTitle, noteContent, Timestamp.now())
+        saveNoteButton.setOnClickListener {
 
-//       NoteService().saveNoteToFirebase(note, listener = )
-        saveNoteViewModel.saveNotes(note)
-        saveNoteViewModel._saveNoteStatus.observe(viewLifecycleOwner, Observer {
+            var noteTitle: String = titleEditText.text.toString()
+            var noteSubTitle: String = subTitleEditText.text.toString()
+            var noteContent: String = contentEditText.text.toString()
 
-            if (it.status) {
-                val fragment = HomePageFragment()
-                val transaction = fragmentManager?.beginTransaction()
-                transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
-            } else {
-                Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+            if (noteTitle == null || noteTitle.isEmpty()) {
+                titleEditText.setError("Title is required")
             }
-        })
+            var note = Note(noteTitle, noteSubTitle, noteContent, Timestamp.now())
 
+            saveNoteViewModel.saveNotes(note)
+            saveNoteViewModel._saveNoteStatus.observe(viewLifecycleOwner, Observer {
+
+                if (it.status) {
+                    val fragment = HomePageFragment()
+                    val transaction = fragmentManager?.beginTransaction()
+                    transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
+                } else {
+                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                }
+            })
+
+        }
 
     }
-
 
 }

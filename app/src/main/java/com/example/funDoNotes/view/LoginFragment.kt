@@ -76,13 +76,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         forgotpass.setOnClickListener {
             val fragment = ResetPasswordFragment()
             val transaction = fragmentManager?.beginTransaction()
-            transaction?.add(R.id.fragmentsContainer, fragment)?.commit()
+            transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
+            transaction?.addToBackStack(null)
         }
 
         tvNewRegister.setOnClickListener {
             val fragment = RegisterFragment()
             val transaction = fragmentManager?.beginTransaction()
-            transaction?.add(R.id.fragmentsContainer, fragment)?.commit()
+            transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
+            transaction?.addToBackStack(null)
         }
 
         loginBtn.setOnClickListener {

@@ -1,5 +1,6 @@
-package com.example.funDoNotes
+package com.example.funDoNotes.view
 
+import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -21,9 +22,9 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var toggle : ActionBarDrawerToggle
-    lateinit var drawerLayout : DrawerLayout
-    lateinit var  navView : NavigationView
+    lateinit var toggle: ActionBarDrawerToggle
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var navView: NavigationView
     lateinit var toolbar: Toolbar
     lateinit var binding: ActivityMainBinding
     private lateinit var fAuth: FirebaseAuth
@@ -36,13 +37,18 @@ class MainActivity : AppCompatActivity() {
         fAuth = FirebaseAuth.getInstance()
         val uid = fAuth.currentUser?.uid
 
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentsContainer, LoginFragment()).commit()
+//        var helper = MyDbHelper(applicationContext)
+//        var db = helper.readableDatabase
+
+
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentsContainer, LoginFragment())
+            .commit()
         val currentUser = fAuth.currentUser
-        if (currentUser != null){
+        if (currentUser != null) {
             val addToBackStack = supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentsContainer, HomePageFragment()).addToBackStack(null)
                 .commit()
-        }else{
+        } else {
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragmentsContainer, LoginFragment())
                 .commit()
@@ -57,19 +63,19 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setTitle("Fun Do")
 
-        toggle = ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close)
+        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        fun signOut(){
+        fun signOut() {
             fAuth.signOut()
             replaceFragment(LoginFragment(), title.toString())
         }
 
         navView.setNavigationItemSelectedListener {
             it.isChecked = true
-            when(it.itemId){
+            when (it.itemId) {
 
                 R.id.nav_home -> replaceFragment(HomePageFragment(), it.title.toString())
                 R.id.nav_reminders -> replaceFragment(RemindersFragment(), it.title.toString())
@@ -77,10 +83,22 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_archive -> replaceFragment(ArchiveFragment(), it.title.toString())
                 R.id.nav_deleted -> replaceFragment(DeleteFragment(), it.title.toString())
                 R.id.nav_setting -> replaceFragment(SettingFragment(), it.title.toString())
-                R.id.nav_helpFeedback -> Toast.makeText(applicationContext,"clicked Help and feedback", Toast.LENGTH_SHORT).show()
+                R.id.nav_helpFeedback -> Toast.makeText(
+                    applicationContext,
+                    "clicked Help and feedback",
+                    Toast.LENGTH_SHORT
+                ).show()
                 R.id.nav_logOut -> signOut()
-                R.id.nav_share -> Toast.makeText(applicationContext,"clicked Share", Toast.LENGTH_SHORT).show()
-                R.id.nav_rateus -> Toast.makeText(applicationContext,"clicked Rate us", Toast.LENGTH_SHORT).show()
+                R.id.nav_share -> Toast.makeText(
+                    applicationContext,
+                    "clicked Share",
+                    Toast.LENGTH_SHORT
+                ).show()
+                R.id.nav_rateus -> Toast.makeText(
+                    applicationContext,
+                    "clicked Rate us",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             true
         }
@@ -104,7 +122,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.opt_menu, menu)
-      val menuItem: MenuItem? = menu?.findItem(R.id.opt_profile_Image)
+        val menuItem: MenuItem? = menu?.findItem(R.id.opt_profile_Image)
         val view = MenuItemCompat.getActionView(menuItem)
 
         return super.onCreateOptionsMenu(menu)
@@ -112,20 +130,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if(toggle.onOptionsItemSelected(item)){
+        if (toggle.onOptionsItemSelected(item)) {
             return true
-        }else if (
-            return when(item.itemId){
+        } else if (
+            return when (item.itemId) {
 
                 R.id.opt_profile_Image -> {
                     addFragment()
-                    Toast.makeText(this,"Clicked on profile", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Clicked on profile", Toast.LENGTH_SHORT).show()
                     true
                 }
                 else -> return super.onOptionsItemSelected(item)
             }
         )
-        toggle.syncState()
+            toggle.syncState()
         return super.onOptionsItemSelected(item)
     }
 

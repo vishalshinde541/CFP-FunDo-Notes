@@ -30,7 +30,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name="com.example.funDoNotes.MainActivity"
+            android:name="com.example.funDoNotes.view.MainActivity"
             android:exported="true">
 
             <meta-data

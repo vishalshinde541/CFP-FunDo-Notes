@@ -46,6 +46,7 @@ class UpdateNoteFragment : Fragment() {
         val bundle = arguments
         if (bundle != null) {
              noteId = bundle.getString("NoteId").toString()
+
         }
 
         firebaseAuth = FirebaseAuth.getInstance()
@@ -68,6 +69,8 @@ class UpdateNoteFragment : Fragment() {
         readAndShowNoteDataFromFirestore()
 
         updateBtn.setOnClickListener {
+
+
             var noteTitle: String = updateTitle.text.toString()
             var noteSubTitle: String = updateSubTitle.text.toString()
             var noteContent: String = updateContent.text.toString()
@@ -79,8 +82,8 @@ class UpdateNoteFragment : Fragment() {
             var note = Note(noteTitle, noteSubTitle, noteContent, Timestamp.now())
 
             var currentUserId = firebaseAuth.currentUser?.uid!!
-//            var noteId = database.collection("user").document(currentUserId)
-//                .collection("my_notes").document("PAqRal6D3eRZKs7NSTJF").id
+
+
             val noteMap = hashMapOf(
                 "title" to note.title,
                 "subtitle" to note.subtitle,
@@ -90,6 +93,7 @@ class UpdateNoteFragment : Fragment() {
 
             )
 
+            var sqlId = noteId
 
             database.collection("user").document(currentUserId).collection("my_notes")
                 .document(noteId).set(noteMap)
@@ -112,6 +116,8 @@ class UpdateNoteFragment : Fragment() {
                     }
 
                 }
+            var helper = MyDbHelper(requireContext())
+            helper.updateData(sqlId, note.title.toString(), note.subtitle.toString(), note.content.toString(), note.timestamp.toString())
         }
 
 

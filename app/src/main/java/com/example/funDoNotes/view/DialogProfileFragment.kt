@@ -69,14 +69,9 @@ class DialogProfileFragment : DialogFragment() {
         readFirestoreData()
 
         clickToSaveImg.setOnClickListener {
-//            dialog.create().show()
-            if (selectedImg == null) {
-                Toast.makeText(
-                    requireContext(),
-                    "Please select your profile image",
-                    Toast.LENGTH_SHORT
-                ).show()
 
+            if (selectedImg!! == null) {
+                Toast.makeText(requireContext(), "Please select your profile image", Toast.LENGTH_SHORT).show()
             } else {
                 uploadImage()
             }
@@ -140,6 +135,7 @@ class DialogProfileFragment : DialogFragment() {
 
         if (data != null) {
             if (data.data != null) {
+
                 selectedImg = data.data!!
             }
             profileImgBtn.setImageURI(selectedImg)
