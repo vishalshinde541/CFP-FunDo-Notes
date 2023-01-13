@@ -152,21 +152,4 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
         return colourList[randomIndex]
     }
 
-
-//    fun filterList(search:String){
-//
-//        noteList.clear()
-//
-//        for (item in noteList){
-//            if (item.title?.lowercase()?.contains(search.lowercase()) == true ||
-//                item.subtitle?.lowercase()?.contains(search.lowercase()) == true ||
-//                item.content?.lowercase()?.contains(search.lowercase()) == true){
-//
-//                noteList.add(item)
-//            }
-//        }
-//
-//        notifyDataSetChanged()
-//    }
-
 }

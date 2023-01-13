@@ -65,7 +65,7 @@ class CreateNewNoteFragment : Fragment() {
         saveNoteButton = view.findViewById(R.id.saveNoteBtn)
         backImageButton = view.findViewById(R.id.backBtn)
 
-        saveNoteToFirestore()
+        checkNEtworkAndSaveNoteTOSqliteOrFirebase()
 
         backImageButton.setOnClickListener {
             val fragment = HomePageFragment()
@@ -73,9 +73,29 @@ class CreateNewNoteFragment : Fragment() {
             transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
         }
 
+
         return view
     }
 
+    private fun checkNEtworkAndSaveNoteTOSqliteOrFirebase(){
+        var noteTitle: String = titleEditText.text.toString()
+        var noteSubTitle: String = subTitleEditText.text.toString()
+        var noteContent: String = contentEditText.text.toString()
+
+        var note = Note(noteTitle, noteSubTitle, noteContent, Timestamp.now())
+
+        val mainActivity = MainActivity()
+        if (mainActivity.checkForInternet(requireContext())) {
+            saveNoteToFirestore()
+            Toast.makeText(context, "Network Connected", Toast.LENGTH_SHORT).show()
+
+        } else {
+            saveNoteToSQLite(note)
+            Toast.makeText(context, "Network Disconnected", Toast.LENGTH_SHORT).show()
+        }
+
+
+    }
     private fun saveNoteToFirestore() {
 
         saveNoteButton.setOnClickListener {
@@ -104,5 +124,14 @@ class CreateNewNoteFragment : Fragment() {
         }
 
     }
+    private fun saveNoteToSQLite(note: Note) {
+        var helper = MyDbHelper(requireContext())
+        helper.addNote(
+            note.noteId.toString(),
+            note.title.toString(), note.subtitle.toString(),
+            note.content.toString(), note.timestamp?.toDate().toString()
+        )
+    }
+
 
 }

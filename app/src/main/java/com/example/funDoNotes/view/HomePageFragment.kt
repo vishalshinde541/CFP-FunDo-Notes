@@ -31,6 +31,7 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
     private lateinit var tempArrayList: ArrayList<Note>
     private lateinit var db: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
+    lateinit var note: Array<String>
 
     private val LIST_VIEW = "LIST_VIEW"
     private val GRID_VIEW = "GRID_VIEW"
@@ -139,6 +140,7 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
                 val searchText = newText!!.lowercase(Locale.getDefault())
 
                 if (searchText.isNotEmpty()) {
+                    tempArrayList.clear()
 
                     noteList.forEach {
                         if (it.title?.lowercase(Locale.getDefault())
@@ -167,7 +169,6 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
         return super.onCreateOptionsMenu(menu, inflater)
     }
-
     private fun listView() {
         currentView = LIST_VIEW
         recyclerView.layoutManager = LinearLayoutManager(requireContext())

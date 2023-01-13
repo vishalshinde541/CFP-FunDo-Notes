@@ -1,6 +1,8 @@
 package com.example.funDoNotes.model
 
 import android.content.Context
+import android.widget.Toast
+import com.example.funDoNotes.view.MainActivity
 import com.example.funDoNotes.view.MyDbHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,6 +17,7 @@ class NoteService(private val myDbHelper: MyDbHelper, var context: Context) {
     }
 
     private fun initService() {
+
         firebaseAuth = FirebaseAuth.getInstance()
         database = FirebaseFirestore.getInstance()
     }
