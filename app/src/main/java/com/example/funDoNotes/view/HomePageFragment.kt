@@ -137,10 +137,9 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
             override fun onQueryTextChange(newText: String?): Boolean {
 
+                tempArrayList.clear()
                 val searchText = newText!!.lowercase(Locale.getDefault())
-
                 if (searchText.isNotEmpty()) {
-                    tempArrayList.clear()
 
                     noteList.forEach {
                         if (it.title?.lowercase(Locale.getDefault())
@@ -169,6 +168,7 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
         return super.onCreateOptionsMenu(menu, inflater)
     }
+
     private fun listView() {
         currentView = LIST_VIEW
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
