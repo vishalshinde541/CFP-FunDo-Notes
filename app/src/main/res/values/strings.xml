@@ -29,4 +29,11 @@
     <string name="save_profileImg">click!! to save selected profile photo</string>
 
 
+    <!-- toolbar title -->
+    <string name="archive_title">Archived notes</string>
+    <string name="home_title">Fun Do</string>
+
+
+
+
 </resources>

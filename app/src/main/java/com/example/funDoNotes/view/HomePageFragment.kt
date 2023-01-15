@@ -50,6 +50,7 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         (requireActivity() as AppCompatActivity).supportActionBar?.show()
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
+        (activity as MainActivity).supportActionBar?.setTitle(R.string.home_title)
 
         firebaseAuth = FirebaseAuth.getInstance()
         floatingActionBtn = view.findViewById(R.id.floatingActionBtn)
@@ -64,13 +65,16 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         db.collection("user").document(firebaseAuth.currentUser?.uid.toString())
             .collection("my_notes")
             .get().addOnSuccessListener {
-
                 if (!it.isEmpty) {
                     for (data in it.documents) {
                         val note: Note? = data.toObject(Note::class.java)
-                        if (note != null) {
-                            noteList.add(note)
-                        }
+                       val result = note?.isArchive.toString()
+                        if (result != "true")
+                            if (note != null) {
+                                noteList.add(note)
+                            }
+
+
                     }
                     tempArrayList.addAll(noteList)
                     recyclerView.adapter = NoteAdapter(requireContext(), tempArrayList)

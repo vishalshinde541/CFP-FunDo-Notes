@@ -65,9 +65,9 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
         }
         holder.lLayoutRow.setOnClickListener {
             val appCompatActivity = it.context as AppCompatActivity
-            var noteId = noteList[position].noteId
-            var fragment = UpdateNoteFragment()
-            var bundle = Bundle()
+            val noteId = noteList[position].noteId
+            val fragment = UpdateNoteFragment()
+            val bundle = Bundle()
             bundle.putString("NoteId", noteId)
             fragment.arguments = bundle
             appCompatActivity.supportFragmentManager.beginTransaction()
@@ -85,7 +85,11 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
 
             when (it.itemId) {
                 R.id.popup_itemArchive -> {
+                    val isArchive : Boolean = true
+                    val currentNoteId = noteList[position].noteId as String
+                    updateArchiveStatus(currentNoteId, isArchive)
                     Toast.makeText(context, "Archive Notes Clicked", Toast.LENGTH_SHORT).show()
+                    notifyDataSetChanged()
                     true
                 }
                 R.id.popup_itemDelete -> {
@@ -119,7 +123,7 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
                     val alert = builder.create()
                     alert.show()
 
-                    var helper = MyDbHelper(context)
+                    val helper = MyDbHelper(context)
                     helper.deleteOneRow(noteId)
                     true
                 }
@@ -134,8 +138,13 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
             .invoke(menu, true)
     }
 
-    override fun getItemCount(): Int {
-        return noteFilterList.size
+    private fun updateArchiveStatus(noteId: String, isArchive : Boolean) {
+        val userId = firebaseAuth.currentUser?.uid!!
+        val docRef = database.collection("user").document(userId).collection("my_notes")
+            .document(noteId)
+        docRef.update("isArchive", isArchive).addOnCompleteListener {
+            Toast.makeText(context, "Note added to Archive list", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun randomColour(): Int {
@@ -150,6 +159,10 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
         val seed = System.currentTimeMillis().toInt()
         val randomIndex = Random(seed).nextInt(colourList.size)
         return colourList[randomIndex]
+    }
+
+    override fun getItemCount(): Int {
+        return noteFilterList.size
     }
 
 }

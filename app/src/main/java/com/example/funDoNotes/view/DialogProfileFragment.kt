@@ -125,8 +125,6 @@ class DialogProfileFragment : DialogFragment() {
 
     private fun uploadInfo(imgUrl: String) {
         userId = firebaseAuth.currentUser?.uid!!
-        val user =
-            User(userId, binding.dialogFname.text.toString(), binding.dialogLname.text.toString())
         val docRef = db.collection("user").document(userId)
         docRef.update("imageUrl", imgUrl).addOnCompleteListener {
             Toast.makeText(requireContext(), "user profile image updated", Toast.LENGTH_SHORT).show()
