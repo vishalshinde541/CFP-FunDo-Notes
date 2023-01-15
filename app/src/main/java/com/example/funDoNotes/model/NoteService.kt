@@ -34,7 +34,8 @@ class NoteService(private val myDbHelper: MyDbHelper, var context: Context) {
             "subtitle" to note.subtitle,
             "content" to note.content,
             "timestamp" to note.timestamp,
-            "noteId" to note.noteId
+            "noteId" to note.noteId,
+            "isArchive" to note.isArchive
         )
 
         saveNoteToSQLite(note)

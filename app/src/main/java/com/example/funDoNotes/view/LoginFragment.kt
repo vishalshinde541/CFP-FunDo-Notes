@@ -1,20 +1,17 @@
 package com.example.funDoNotes.view
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.funDoNotes.model.User
@@ -23,9 +20,12 @@ import com.example.funDoNotes.viewmodel.LoginViewModelFactory
 import com.example.funDoNotes.viewmodel.LoginVieweModel
 import com.example.loginandregistrationwithfragment.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
@@ -43,6 +43,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory(UserAuthService())).get(
             LoginVieweModel::class.java
         )
+
     }
 
     override fun onCreateView(
@@ -69,7 +70,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+
         gooleBtn.setOnClickListener {
+            Toast.makeText(context, "Logging In", Toast.LENGTH_SHORT).show()
             signInGoogle()
         }
 
@@ -95,19 +98,23 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun signInGoogle() {
-        val signInIntent = googleSignInClient.signInIntent
-        launcher.launch(signInIntent)
+        val signInIntent: Intent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, 1)
+//        val signInIntent = googleSignInClient.signInIntent
+//        launcher.launch(signInIntent)
     }
 
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+
                 val fragment = HomePageFragment()
                 val transaction = fragmentManager?.beginTransaction()
                 transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
             }
         }
+
 
     private fun firebaseSignIn() {
         loginBtn.isEnabled = false

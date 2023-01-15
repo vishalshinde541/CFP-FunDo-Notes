@@ -76,7 +76,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_reminders -> replaceFragment(RemindersFragment(), it.title.toString())
                 R.id.nav_newLable -> replaceFragment(CreateNewLableFragment(), it.title.toString())
                 R.id.nav_archive -> replaceFragment(ArchiveFragment(), it.title.toString())
-                R.id.nav_deleted -> replaceFragment(DeleteFragment(), it.title.toString())
                 R.id.nav_setting -> replaceFragment(SettingFragment(), it.title.toString())
                 R.id.nav_helpFeedback -> Toast.makeText(
                     applicationContext,

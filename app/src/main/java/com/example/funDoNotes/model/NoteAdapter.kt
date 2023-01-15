@@ -25,8 +25,8 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
     RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
     var noteFilterList = ArrayList<Note>()
-    private lateinit var database: FirebaseFirestore
-    private lateinit var firebaseAuth: FirebaseAuth
+    private var database: FirebaseFirestore
+    private var firebaseAuth: FirebaseAuth
 
     init {
         noteFilterList = noteList

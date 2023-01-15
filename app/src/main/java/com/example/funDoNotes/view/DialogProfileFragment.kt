@@ -102,7 +102,10 @@ class DialogProfileFragment : DialogFragment() {
                     fName.text = it.result.getString("firstName")
                     lName.text = it.result.getString("lastName")
                     email.text = it.result.getString("email")
-                    Glide.with(this).load(it.result.getString("imageUrl")).into(image)
+                    val result = it.result.getString("imageUrl")
+                    if (result != null){
+                        Glide.with(this).load(it.result.getString("imageUrl")).into(image)
+                    }
                 } else {
                     Log.d(TAG, "No such document")
                 }

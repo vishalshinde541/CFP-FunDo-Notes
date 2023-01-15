@@ -6,6 +6,13 @@
     android:background="@color/white"
     tools:context="com.example.funDoNotes.view.CreateNewNoteFragment">
 
+    <ImageView
+        android:layout_width="145dp"
+        android:layout_height="145dp"
+        android:layout_marginTop="360dp"
+        android:src="@drawable/ic_baseline_edit_note_24"
+        android:layout_centerHorizontal="true"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="80dp"
         android:layout_height="80dp"
