@@ -119,7 +119,7 @@ class UpdateNoteFragment : Fragment() {
     }
 
     private fun readAndShowNoteDataFromFirestore() {
-        var currentUserId = firebaseAuth.currentUser?.uid!!
+        val currentUserId = firebaseAuth.currentUser?.uid!!
 
 
         val docRef = database.collection("user").document(currentUserId)

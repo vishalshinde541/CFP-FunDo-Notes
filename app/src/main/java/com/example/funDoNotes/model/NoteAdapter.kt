@@ -61,8 +61,70 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
         holder.noteId = noteList[position].noteId as String
 
         holder.menuBtn.setOnClickListener {
-            popupMenu(it, holder.noteId, position)
+
+            val currentUserId = firebaseAuth.currentUser?.uid
+            val popupMenus = PopupMenu(context, holder.menuBtn)
+            popupMenus.inflate(R.menu.rv_popup_menu)
+            popupMenus.setOnMenuItemClickListener {
+
+                when (it.itemId) {
+                    R.id.popup_itemArchive -> {
+                         noteList[position].isArchive = true
+                        val currentNoteId = noteList[position].noteId as String
+                        updateArchiveStatus(currentNoteId, true)
+                        Toast.makeText(context, "Archive Notes Clicked", Toast.LENGTH_SHORT).show()
+                        notifyDataSetChanged()
+                        true
+                    }
+                    R.id.popup_itemDelete -> {
+
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Delete Note")
+                            .setMessage("Are you sure you want to Delete?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes") { dialog, id ->
+                                database.collection("user").document(currentUserId!!)
+                                    .collection("my_notes").document(holder.noteId).delete()
+                                    .addOnCompleteListener {
+                                        if (it.isSuccessful) {
+                                            noteList.remove(noteList[position])
+                                            notifyDataSetChanged()
+                                            Toast.makeText(context, "Item Deleted", Toast.LENGTH_SHORT)
+                                                .show()
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "Error while deleting",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+                            }
+                            .setNegativeButton("No") { dialog, id ->
+                                // Dismiss the dialog
+                                dialog.dismiss()
+                            }
+                        val alert = builder.create()
+                        alert.show()
+
+                        val helper = MyDbHelper(context)
+                        helper.deleteOneRow(holder.noteId)
+                        true
+                    }
+                    else -> true
+                }
+            }
+            popupMenus.show()
+            val popup = PopupMenu::class.java.getDeclaredField("mPopup")
+            popup.isAccessible = true
+            val menu = popup.get(popupMenus)
+            menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                .invoke(menu, true)
+
+
         }
+
+
         holder.lLayoutRow.setOnClickListener {
             val appCompatActivity = it.context as AppCompatActivity
             val noteId = noteList[position].noteId
@@ -77,66 +139,7 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
         }
     }
 
-    private fun popupMenu(itemView: View, noteId: String, position: Int) {
-        val currentUserId = firebaseAuth.currentUser?.uid
-        val popupMenus = PopupMenu(context, itemView)
-        popupMenus.inflate(R.menu.rv_popup_menu)
-        popupMenus.setOnMenuItemClickListener {
 
-            when (it.itemId) {
-                R.id.popup_itemArchive -> {
-                    val isArchive : Boolean = true
-                    val currentNoteId = noteList[position].noteId as String
-                    updateArchiveStatus(currentNoteId, isArchive)
-                    Toast.makeText(context, "Archive Notes Clicked", Toast.LENGTH_SHORT).show()
-                    notifyDataSetChanged()
-                    true
-                }
-                R.id.popup_itemDelete -> {
-
-                    val builder = AlertDialog.Builder(context)
-                    builder.setTitle("Delete Note")
-                        .setMessage("Are you sure you want to Delete?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { dialog, id ->
-                            database.collection("user").document(currentUserId!!)
-                                .collection("my_notes").document(noteId).delete()
-                                .addOnCompleteListener {
-                                    if (it.isSuccessful) {
-                                        noteList.remove(noteList[position])
-                                        notifyDataSetChanged()
-                                        Toast.makeText(context, "Item Deleted", Toast.LENGTH_SHORT)
-                                            .show()
-                                    } else {
-                                        Toast.makeText(
-                                            context,
-                                            "Error while deleting",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
-                        }
-                        .setNegativeButton("No") { dialog, id ->
-                            // Dismiss the dialog
-                            dialog.dismiss()
-                        }
-                    val alert = builder.create()
-                    alert.show()
-
-                    val helper = MyDbHelper(context)
-                    helper.deleteOneRow(noteId)
-                    true
-                }
-                else -> true
-            }
-        }
-        popupMenus.show()
-        val popup = PopupMenu::class.java.getDeclaredField("mPopup")
-        popup.isAccessible = true
-        val menu = popup.get(popupMenus)
-        menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-            .invoke(menu, true)
-    }
 
     private fun updateArchiveStatus(noteId: String, isArchive : Boolean) {
         val userId = firebaseAuth.currentUser?.uid!!

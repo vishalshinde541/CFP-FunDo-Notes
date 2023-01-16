@@ -32,6 +32,8 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
     private lateinit var db: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
     lateinit var note: Array<String>
+    private var archiveStatus: Boolean = false
+
 
     private val LIST_VIEW = "LIST_VIEW"
     private val GRID_VIEW = "GRID_VIEW"
@@ -53,6 +55,7 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         (activity as MainActivity).supportActionBar?.setTitle(R.string.home_title)
 
         firebaseAuth = FirebaseAuth.getInstance()
+        val currentUserId = firebaseAuth.currentUser?.uid!!
         floatingActionBtn = view.findViewById(R.id.floatingActionBtn)
         recyclerView = view.findViewById(R.id.recycler_home)
         val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
@@ -62,18 +65,25 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         tempArrayList = arrayListOf<Note>()
 
         db = FirebaseFirestore.getInstance()
-        db.collection("user").document(firebaseAuth.currentUser?.uid.toString())
+        db.collection("user").document(currentUserId)
             .collection("my_notes")
             .get().addOnSuccessListener {
                 if (!it.isEmpty) {
                     for (data in it.documents) {
                         val note: Note? = data.toObject(Note::class.java)
-                       val result = note?.isArchive.toString()
-                        if (result != "true")
-                            if (note != null) {
-                                noteList.add(note)
+                        val noteId = note?.noteId.toString()
+                        val docRef = db.collection("user").document(currentUserId)
+                            .collection("my_notes").document(noteId)
+                        docRef.get().addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                archiveStatus = it.result.getBoolean("isArchive")!!
                             }
-
+                        }
+                            if (note != null) {
+                                if (archiveStatus == false){
+                                    noteList.add(note)
+                                }
+                            }
 
                     }
                     tempArrayList.addAll(noteList)

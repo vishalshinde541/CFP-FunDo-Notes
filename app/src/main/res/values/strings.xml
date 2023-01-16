@@ -30,7 +30,7 @@
 
 
     <!-- toolbar title -->
-    <string name="archive_title">Archived notes</string>
+    <string name="archive_title">Archive</string>
     <string name="home_title">Fun Do</string>
 
 
