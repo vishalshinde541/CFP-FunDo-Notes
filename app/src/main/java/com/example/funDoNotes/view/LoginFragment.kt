@@ -1,5 +1,6 @@
 package com.example.funDoNotes.view
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,12 +22,9 @@ import com.example.funDoNotes.viewmodel.LoginViewModelFactory
 import com.example.funDoNotes.viewmodel.LoginVieweModel
 import com.example.loginandregistrationwithfragment.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
@@ -35,6 +34,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var loginBtn: Button
     private lateinit var gooleBtn: ImageView
     private lateinit var fAuth: FirebaseAuth
+
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -46,11 +46,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
+        (activity as MainActivity?)?.setDrawerLocked()
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_login, container, false)
@@ -63,6 +65,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         loginBtn = view.findViewById(R.id.loginBtn)
         gooleBtn = view.findViewById(R.id.googleBtn)
         fAuth = FirebaseAuth.getInstance()
+
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -93,6 +96,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         loginBtn.setOnClickListener {
             validateField()
         }
+
+
 
         return view
     }

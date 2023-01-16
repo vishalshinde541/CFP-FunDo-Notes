@@ -50,6 +50,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         savedInstanceState: Bundle?
     ): View? {
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
+        (activity as MainActivity?)?.setDrawerLocked()
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_register, container, false)
@@ -73,6 +74,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         registerBtn.setOnClickListener {
             validateEmptyField()
         }
+
+
         return view
     }
 
@@ -153,6 +156,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as MainActivity?)?.setDrawerUnlocked()
     }
 }
 
