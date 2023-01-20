@@ -46,7 +46,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     }
 
-    @SuppressLint("MissingInflatedId")
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -130,7 +130,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             password = loginPassword.text.toString(),
             username = loginUsername.text.toString()
         )
-        loginViewModel.loginUser(user)
+        loginViewModel.  loginUser(user)
         loginViewModel._userLoginStatus.observe(viewLifecycleOwner, Observer {
 
             if (it.status) {

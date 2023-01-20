@@ -1,12 +1,17 @@
 package com.example.funDoNotes.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.ImageButton
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +21,7 @@ import com.example.funDoNotes.model.NoteAdapter
 import com.example.loginandregistrationwithfragment.R
 import com.example.loginandregistrationwithfragment.databinding.FragmentHomePageBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
@@ -29,12 +35,14 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
     private lateinit var recyclerView: RecyclerView
     private lateinit var noteList: ArrayList<Note>
     private lateinit var tempArrayList: ArrayList<Note>
+    private lateinit var notlistFromFirebase : ArrayList<Note>
     private lateinit var db: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
     lateinit var note: Array<String>
-    private var archiveStatus: Boolean = false
 
+    private lateinit var menuBtn: ImageButton
 
+    private var noteId : String = ""
     private val LIST_VIEW = "LIST_VIEW"
     private val GRID_VIEW = "GRID_VIEW"
     var currentView = "GRID_VIEW"
@@ -50,12 +58,14 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         savedInstanceState: Bundle?
     ): View? {
         (requireActivity() as AppCompatActivity).supportActionBar?.show()
+        (activity as MainActivity?)?.setDrawerUnlocked()
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home_page, container, false)
+        val itemView = inflater.inflate(R.layout.notes_list_view, container, false)
         (activity as MainActivity).supportActionBar?.setTitle(R.string.home_title)
 
         firebaseAuth = FirebaseAuth.getInstance()
-        val currentUserId = firebaseAuth.currentUser?.uid!!
+        db = FirebaseFirestore.getInstance()
         floatingActionBtn = view.findViewById(R.id.floatingActionBtn)
         recyclerView = view.findViewById(R.id.recycler_home)
         val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
@@ -63,40 +73,110 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
         noteList = arrayListOf<Note>()
         tempArrayList = arrayListOf<Note>()
+        notlistFromFirebase = arrayListOf<Note>()
 
-        db = FirebaseFirestore.getInstance()
-        db.collection("user").document(currentUserId)
-            .collection("my_notes")
-            .get().addOnSuccessListener {
-                if (!it.isEmpty) {
-                    for (data in it.documents) {
-                        val note: Note? = data.toObject(Note::class.java)
-                        val noteId = note?.noteId.toString()
-                        val docRef = db.collection("user").document(currentUserId)
-                            .collection("my_notes").document(noteId)
-                        docRef.get().addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                archiveStatus = it.result.getBoolean("isArchive")!!
-                            }
-                        }
-                            if (note != null) {
-                                if (archiveStatus == false){
-                                    noteList.add(note)
-                                }
-                            }
+        menuBtn = itemView.findViewById(R.id.menuImageBtn)
+        menuBtn.visibility = View.GONE
 
-                    }
-                    tempArrayList.addAll(noteList)
-                    recyclerView.adapter = NoteAdapter(requireContext(), tempArrayList)
 
-                    noteList.sortByDescending {
-                        it.timestamp
-                    }
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
-            }
+
+
+//        menuBtn.setOnClickListener {
+//
+//
+//            val currentUserId = firebaseAuth.currentUser?.uid
+//            val popupMenus = PopupMenu(context, menuBtn)
+//            popupMenus.inflate(R.menu.rv_popup_menu)
+//            popupMenus.setOnMenuItemClickListener {
+//
+//                when (it.itemId) {
+//
+//
+//                    R.id.popup_itemArchive -> {
+//                        db.collection("user").document(firebaseAuth.currentUser?.uid!!)
+//                            .collection("my_notes")
+//                            .get().addOnCompleteListener {
+//                                if (it.isSuccessful){
+//                                    for (document in it.result){
+//                                        val userNote : Note = Note(document["title"].toString(),
+//                                            document["subtitle"].toString(),
+//                                            document["content"].toString(),
+//                                            document["timestamp"] as Timestamp,
+//                                            document["noteId"].toString(),
+//                                            document["isArchive"] as Boolean
+//                                        )
+//
+//                                        noteId = userNote.noteId.toString()
+//                                    }
+//                                }
+//
+//                            }
+//
+//
+//                        updateArchiveStatus(noteId, true)
+//                        val appCompatActivity = context as AppCompatActivity
+//                        val fragment = ArchiveFragment()
+//                        appCompatActivity.supportFragmentManager.beginTransaction()
+//                            .replace(R.id.fragmentsContainer, fragment)
+//                            .addToBackStack(null)
+//                            .commit()
+//                        it.isVisible.not()
+//
+//                        true
+//                    }
+//                    R.id.popup_itemDelete -> {
+//
+//                        val builder = AlertDialog.Builder(requireContext())
+//                        builder.setTitle("Delete Note")
+//                            .setMessage("Are you sure you want to Delete?")
+//                            .setCancelable(false)
+//                            .setPositiveButton("Yes") { dialog, id ->
+//                                db.collection("user").document(currentUserId!!)
+//                                    .collection("my_notes").document(noteId).delete()
+//                                    .addOnCompleteListener {
+////                                        val position = viewHold
+//                                        if (it.isSuccessful) {
+////                                            noteList.remove()
+//                                            recyclerView.adapter?.notifyDataSetChanged()
+//                                            Toast.makeText(context, "Item Deleted", Toast.LENGTH_SHORT)
+//                                                .show()
+//                                        } else {
+//                                            Toast.makeText(
+//                                                context,
+//                                                "Error while deleting",
+//                                                Toast.LENGTH_SHORT
+//                                            ).show()
+//                                        }
+//                                    }
+//                            }
+//                            .setNegativeButton("No") { dialog, id ->
+//                                // Dismiss the dialog
+//                                dialog.dismiss()
+//                            }
+//                        val alert = builder.create()
+//                        alert.show()
+//
+//                        val helper = MyDbHelper(requireContext())
+//                        helper.deleteOneRow(noteId)
+//                        true
+//                    }
+//                    else -> true
+//                }
+//            }
+//            popupMenus.show()
+//            val popup = PopupMenu::class.java.getDeclaredField("mPopup")
+//            popup.isAccessible = true
+//            val menu = popup.get(popupMenus)
+//            menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+//                .invoke(menu, true)
+//
+//
+//
+//
+//        }
+
+
+        retrievNotesFromFirestoreAndStoreToNoteList()
 
         floatingActionBtn.setOnClickListener {
             val fragment = CreateNewNoteFragment()
@@ -107,6 +187,51 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         }
 
         return view
+    }
+
+//    private fun updateArchiveStatus(noteId: String, isArchive : Boolean) {
+//        val userId = firebaseAuth.currentUser?.uid!!
+//        val docRef = db.collection("user").document(userId).collection("my_notes")
+//            .document(noteId)
+//        docRef.update("isArchive", isArchive).addOnCompleteListener {
+//            Toast.makeText(context, "Note added to Archive list", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+
+    fun retrievNotesFromFirestoreAndStoreToNoteList(){
+
+        db.collection("user").document(firebaseAuth.currentUser?.uid!!)
+            .collection("my_notes")
+            .get().addOnCompleteListener {
+                var notlistFromFirebase : ArrayList<Note> = arrayListOf<Note>()
+                if (it.isSuccessful){
+                    for (document in it.result){
+                        val userNote : Note = Note(document["title"].toString(),
+                            document["subtitle"].toString(),
+                            document["content"].toString(),
+                            document["timestamp"] as Timestamp,
+                            document["noteId"].toString(),
+                            document["isArchive"] as Boolean
+                        )
+                        notlistFromFirebase.add(userNote)
+                    }
+                    var homeNoteList = notlistFromFirebase.filter { it.isArchive == false }
+                    Log.d("Archive fragment", "$notlistFromFirebase")
+
+                    noteList.addAll(homeNoteList)
+
+                    tempArrayList.addAll(noteList)
+                    tempArrayList.sortByDescending {
+                        it.timestamp
+                    }
+                    recyclerView.adapter = NoteAdapter(requireContext(), tempArrayList)
+                }
+
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+            }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

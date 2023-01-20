@@ -13,7 +13,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.funDoNotes.view.ArchiveFragment
 import com.example.funDoNotes.view.MyDbHelper
 import com.example.funDoNotes.view.UpdateNoteFragment
 import com.example.loginandregistrationwithfragment.R
@@ -21,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.random.Random
 
-class NoteAdapter(private val context: Context, private val noteList: ArrayList<Note>) :
+class  NoteAdapter(private val context: Context, private val noteList: ArrayList<Note>) :
     RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
     var noteFilterList = ArrayList<Note>()
@@ -72,7 +74,14 @@ class NoteAdapter(private val context: Context, private val noteList: ArrayList<
                          noteList[position].isArchive = true
                         val currentNoteId = noteList[position].noteId as String
                         updateArchiveStatus(currentNoteId, true)
-                        Toast.makeText(context, "Archive Notes Clicked", Toast.LENGTH_SHORT).show()
+                        val appCompatActivity = context as AppCompatActivity
+                        val noteId = noteList[position].noteId
+                        val fragment = ArchiveFragment()
+                        appCompatActivity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentsContainer, fragment)
+                            .addToBackStack(null)
+                            .commit()
+
                         notifyDataSetChanged()
                         true
                     }

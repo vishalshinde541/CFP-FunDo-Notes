@@ -86,7 +86,8 @@ class UpdateNoteFragment : Fragment() {
                 "subtitle" to note.subtitle,
                 "content" to note.content,
                 "timestamp" to note.timestamp,
-                "noteId" to noteId
+                "noteId" to noteId,
+                "isArchive" to note.isArchive
 
             )
 
