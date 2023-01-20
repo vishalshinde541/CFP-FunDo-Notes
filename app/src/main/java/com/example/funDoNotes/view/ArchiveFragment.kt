@@ -9,18 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.funDoNotes.model.ArchiveNoteAdapter
 import com.example.funDoNotes.model.Note
-import com.example.funDoNotes.model.NoteAdapter
-
 import com.example.loginandregistrationwithfragment.R
 import com.example.loginandregistrationwithfragment.databinding.FragmentArchiveBinding
-import com.example.loginandregistrationwithfragment.databinding.FragmentHomePageBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -37,7 +33,6 @@ class ArchiveFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
     lateinit var note: Array<String>
-    private var archiveStatus: Boolean = false
 
     private val LIST_VIEW = "LIST_VIEW"
     private val GRID_VIEW = "GRID_VIEW"
@@ -71,7 +66,7 @@ class ArchiveFragment : Fragment() {
         tempArrayList = arrayListOf<Note>()
         notlistFromFirebase = arrayListOf<Note>()
 
-        menuBtn.visibility = View.GONE
+
         db = FirebaseFirestore.getInstance()
         getArchivedNotesAndAddToArchiveList()
 
@@ -104,7 +99,7 @@ class ArchiveFragment : Fragment() {
                     tempArrayList.sortByDescending {
                         it.timestamp
                     }
-                    recyclerView.adapter = NoteAdapter(requireContext(), tempArrayList)
+                    recyclerView.adapter = ArchiveNoteAdapter(requireContext(), tempArrayList)
                 }
 
             }
@@ -168,7 +163,6 @@ class ArchiveFragment : Fragment() {
                             it.content?.lowercase(Locale.getDefault())
                                 ?.contains(searchText) == true
                         ) {
-
                             tempArrayList.add(it)
                         }
                     }
@@ -191,7 +185,7 @@ class ArchiveFragment : Fragment() {
     private fun listView() {
         currentView = LIST_VIEW
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = NoteAdapter(requireContext(), archivrNoteList)
+        recyclerView.adapter = ArchiveNoteAdapter(requireContext(), archivrNoteList)
 
     }
 
@@ -199,7 +193,7 @@ class ArchiveFragment : Fragment() {
         currentView = GRID_VIEW
         val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
         recyclerView.layoutManager = staggeredGridLayoutManager
-        recyclerView.adapter = NoteAdapter(requireContext(), archivrNoteList)
+        recyclerView.adapter = ArchiveNoteAdapter(requireContext(), archivrNoteList)
     }
 
 }

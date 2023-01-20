@@ -46,7 +46,6 @@ class UpdateNoteFragment : Fragment() {
         val bundle = arguments
         if (bundle != null) {
             noteId = bundle.getString("NoteId").toString()
-
         }
 
         firebaseAuth = FirebaseAuth.getInstance()
@@ -69,7 +68,6 @@ class UpdateNoteFragment : Fragment() {
 
         updateBtn.setOnClickListener {
 
-
             var noteTitle: String = updateTitle.text.toString()
             var noteSubTitle: String = updateSubTitle.text.toString()
             var noteContent: String = updateContent.text.toString()
@@ -88,7 +86,6 @@ class UpdateNoteFragment : Fragment() {
                 "timestamp" to note.timestamp,
                 "noteId" to noteId,
                 "isArchive" to note.isArchive
-
             )
 
             var sqlId = noteId
@@ -97,12 +94,20 @@ class UpdateNoteFragment : Fragment() {
                 .document(noteId).set(noteMap)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        Toast.makeText(requireContext(), "Note updated successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Note updated successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         val fragment = HomePageFragment()
                         val transaction = fragmentManager?.beginTransaction()
                         transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
                     } else {
-                        Toast.makeText(requireContext(), "Failed to update note", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to update note",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
 
                 }

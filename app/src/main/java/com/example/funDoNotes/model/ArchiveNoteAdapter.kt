@@ -5,16 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.funDoNotes.view.ArchiveFragment
+import com.example.funDoNotes.view.HomePageFragment
 import com.example.funDoNotes.view.MyDbHelper
 import com.example.funDoNotes.view.UpdateNoteFragment
 import com.example.loginandregistrationwithfragment.R
@@ -22,8 +18,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.random.Random
 
-open class NoteAdapter(private val context: Context, private val noteList: ArrayList<Note>) :
-    RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+class ArchiveNoteAdapter(var context: Context, var noteList: ArrayList<Note>) :
+    RecyclerView.Adapter<ArchiveNoteAdapter.ArchiveNoteViewHolder>() {
 
     var noteFilterList = ArrayList<Note>()
     private var database: FirebaseFirestore
@@ -35,7 +31,8 @@ open class NoteAdapter(private val context: Context, private val noteList: Array
         firebaseAuth = FirebaseAuth.getInstance()
     }
 
-    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ArchiveNoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         val title: TextView = itemView.findViewById(R.id.notesContainer_tvTitle)
         val subTitle: TextView = itemView.findViewById(R.id.notesContainer_tvSubtitle)
         val noteContent: TextView = itemView.findViewById(R.id.notesContainer_tvNoteContent)
@@ -47,13 +44,13 @@ open class NoteAdapter(private val context: Context, private val noteList: Array
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArchiveNoteViewHolder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.notes_list_view, parent, false)
-        return NoteViewHolder(itemView)
+        return ArchiveNoteViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ArchiveNoteViewHolder, position: Int) {
         holder.title.text = noteList[position].title
         holder.subTitle.text = noteList[position].subtitle
         holder.noteContent.text = noteList[position].content
@@ -65,16 +62,16 @@ open class NoteAdapter(private val context: Context, private val noteList: Array
 
             val currentUserId = firebaseAuth.currentUser?.uid
             val popupMenus = PopupMenu(context, holder.menuBtn)
-            popupMenus.inflate(R.menu.rv_popup_menu)
+            popupMenus.inflate(R.menu.archive_rv_popup_menu)
             popupMenus.setOnMenuItemClickListener {
 
                 when (it.itemId) {
-                    R.id.popup_itemArchive -> {
-                        noteList[position].isArchive = true
+                    R.id.archive_popup_itemArchive -> {
+
                         val currentNoteId = noteList[position].noteId as String
-                        updateArchiveStatus(currentNoteId, true)
+                        updateArchiveStatus(currentNoteId, false)
                         val appCompatActivity = context as AppCompatActivity
-                        val fragment = ArchiveFragment()
+                        val fragment = HomePageFragment()
                         appCompatActivity.supportFragmentManager.beginTransaction()
                             .replace(R.id.fragmentsContainer, fragment)
                             .addToBackStack(null)
@@ -83,7 +80,7 @@ open class NoteAdapter(private val context: Context, private val noteList: Array
                         notifyDataSetChanged()
                         true
                     }
-                    R.id.popup_itemDelete -> {
+                    R.id.archive_popup_itemDelete -> {
 
                         val builder = AlertDialog.Builder(context)
                         builder.setTitle("Delete Note")
@@ -98,10 +95,9 @@ open class NoteAdapter(private val context: Context, private val noteList: Array
                                             notifyDataSetChanged()
                                             Toast.makeText(
                                                 context,
-                                                "Item Deleted",
+                                                "Note Deleted",
                                                 Toast.LENGTH_SHORT
-                                            )
-                                                .show()
+                                            ).show()
                                         } else {
                                             Toast.makeText(
                                                 context,
@@ -131,6 +127,7 @@ open class NoteAdapter(private val context: Context, private val noteList: Array
             val menu = popup.get(popupMenus)
             menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
                 .invoke(menu, true)
+
         }
 
         holder.lLayoutRow.setOnClickListener {
@@ -144,15 +141,6 @@ open class NoteAdapter(private val context: Context, private val noteList: Array
                 .replace(R.id.fragmentsContainer, fragment)
                 .addToBackStack(null)
                 .commit()
-        }
-    }
-
-    private fun updateArchiveStatus(noteId: String, isArchive: Boolean) {
-        val userId = firebaseAuth.currentUser?.uid!!
-        val docRef = database.collection("user").document(userId).collection("my_notes")
-            .document(noteId)
-        docRef.update("isArchive", isArchive).addOnCompleteListener {
-            Toast.makeText(context, "Note added to Archive list", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -170,8 +158,20 @@ open class NoteAdapter(private val context: Context, private val noteList: Array
         return colourList[randomIndex]
     }
 
+    private fun updateArchiveStatus(noteId: String, isArchive: Boolean) {
+        val userId = firebaseAuth.currentUser?.uid!!
+        val docRef = database.collection("user").document(userId).collection("my_notes")
+            .document(noteId)
+        docRef.update("isArchive", isArchive).addOnCompleteListener {
+            Toast.makeText(context, "Note removed from Archive list", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
     override fun getItemCount(): Int {
         return noteFilterList.size
     }
-
 }
+
+
+
