@@ -26,6 +26,6 @@ class SplashActivity : AppCompatActivity() {
     }
 }
 
-private fun Handler.postDelayed(function: () -> Unit, delay: Int) {
 
-}
+
+

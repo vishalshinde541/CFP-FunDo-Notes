@@ -167,9 +167,5 @@ class MainActivity : AppCompatActivity(), NavDrawerHandler {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
-    override fun setDrawerUnlocked() {
-        super.setDrawerUnlocked()
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    }
 
 }

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.funDoNotes.model.ArchiveNoteAdapter
 import com.example.funDoNotes.model.Note
 import com.example.funDoNotes.model.NoteAdapter
 import com.example.loginandregistrationwithfragment.R
@@ -23,7 +24,16 @@ import com.example.loginandregistrationwithfragment.databinding.FragmentHomePage
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -43,6 +53,7 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
     private val LIST_VIEW = "LIST_VIEW"
     private val GRID_VIEW = "GRID_VIEW"
     var currentView = "GRID_VIEW"
+    private lateinit var lastVisible : DocumentSnapshot
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +74,7 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
 
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+//        val currentUserId = firebaseAuth.currentUser?.uid!!
         floatingActionBtn = view.findViewById(R.id.floatingActionBtn)
         recyclerView = view.findViewById(R.id.recycler_home)
         val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
@@ -71,8 +83,11 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         noteList = arrayListOf<Note>()
         tempArrayList = arrayListOf<Note>()
         notlistFromFirebase = arrayListOf<Note>()
+//        getNotes()
 
         retrievNotesFromFirestoreAndStoreToNoteList()
+
+
 
         floatingActionBtn.setOnClickListener {
             val fragment = CreateNewNoteFragment()
@@ -85,16 +100,42 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
         return view
     }
 
+    private fun getNotes() {
+        val notes = getNoteService.noteIntance.getNotes()
+        notes.enqueue(object : Callback<List<Note?>?>{
+            override fun onResponse(call: Call<List<Note?>?>, response: Response<List<Note?>?>) {
+                val noteListAPI : List<Note?>? = response.body()
+//                var homeNoteList = noteListAPI?.filter { it.isArchive == false }
+                Log.d("Home fragment**", noteListAPI.toString())
+//                if (noteListAPI != null) {
+//                    noteList.add(noteListAPI)
+//                }
+
+//                if (homeNoteList != null) {
+//                    noteList.addAll(homeNoteList)
+//                }
+
+                tempArrayList.addAll(noteList)
+                recyclerView.adapter?.notifyDataSetChanged()
+                recyclerView.adapter = NoteAdapter(requireContext(), tempArrayList)
+            }
+
+            override fun onFailure(call: Call<List<Note?>?>, t: Throwable) {
+                Toast.makeText(requireContext(), t.message,
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     fun retrievNotesFromFirestoreAndStoreToNoteList() {
 
         db.collection("user").document(firebaseAuth.currentUser?.uid!!)
             .collection("my_notes")
             .get().addOnCompleteListener {
-                var notlistFromFirebase: ArrayList<Note> = arrayListOf<Note>()
-                if (it.isSuccessful) {
-                    for (document in it.result) {
-                        val userNote: Note = Note(
-                            document["title"].toString(),
+                var notlistFromFirebase : ArrayList<Note> = arrayListOf<Note>()
+                if (it.isSuccessful){
+                    for (document in it.result){
+                        val userNote : Note = Note(document["title"].toString(),
                             document["subtitle"].toString(),
                             document["content"].toString(),
                             document["timestamp"] as Timestamp,
@@ -102,12 +143,12 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
                             document["isArchive"] as Boolean
                         )
                         notlistFromFirebase.add(userNote)
+
                     }
-                    var homeNoteList = notlistFromFirebase.filter { it.isArchive == false }
+                    var filterNoteList = notlistFromFirebase.filter { it.isArchive == false }
                     Log.d("Archive fragment", "$notlistFromFirebase")
 
-                    noteList.addAll(homeNoteList)
-
+                    noteList.addAll(filterNoteList)
                     tempArrayList.addAll(noteList)
                     tempArrayList.sortByDescending {
                         it.timestamp
@@ -123,6 +164,7 @@ class HomePageFragment : Fragment(R.layout.fragment_home_page) {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
 
         return when (item.itemId) {
             R.id.opt_switchView -> {

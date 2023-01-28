@@ -1,10 +1,10 @@
 package com.example.funDoNotes.view
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +12,6 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -35,7 +34,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var gooleBtn: ImageView
     private lateinit var fAuth: FirebaseAuth
 
-
     private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,16 +41,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory(UserAuthService())).get(
             LoginVieweModel::class.java
         )
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
-        (activity as MainActivity?)?.setDrawerLocked()
+//        (activity as MainActivity?)?.setDrawerLocked()
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_login, container, false)
@@ -65,7 +61,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         loginBtn = view.findViewById(R.id.loginBtn)
         gooleBtn = view.findViewById(R.id.googleBtn)
         fAuth = FirebaseAuth.getInstance()
-
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -97,8 +92,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             validateField()
         }
 
-
-
         return view
     }
 
@@ -120,7 +113,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         }
 
-
     private fun firebaseSignIn() {
         loginBtn.isEnabled = false
         loginBtn.alpha = 0.5f
@@ -130,17 +122,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             password = loginPassword.text.toString(),
             username = loginUsername.text.toString()
         )
-        loginViewModel.  loginUser(user)
+        loginViewModel.loginUser(user)
+//        loginViewModel.loginWithApi(user.username, user.password)
         loginViewModel._userLoginStatus.observe(viewLifecycleOwner, Observer {
 
             if (it.status) {
+                Toast.makeText(context, "Successfully with rest api", Toast.LENGTH_SHORT).show()
                 val fragment = HomePageFragment()
                 val transaction = fragmentManager?.beginTransaction()
                 transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
+
             } else {
                 loginBtn.isEnabled = true
                 loginBtn.alpha = 1.0f
-                Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "failed with rest api", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -160,8 +156,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             loginUsername.text.toString().isNotEmpty() &&
                     loginPassword.text.toString().isNotEmpty() -> {
 
-                if (loginUsername.text.toString()
-                        .matches(Regex("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"))
+                if (Patterns.EMAIL_ADDRESS.matcher(loginUsername.text.toString()).matches()
                 ) {
                     firebaseSignIn()
                     Toast.makeText(context, "Login Successful", Toast.LENGTH_LONG).show()
@@ -171,6 +166,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
 
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as MainActivity?)?.setDrawerUnlocked()
     }
 
 

@@ -1,6 +1,10 @@
 package com.example.funDoNotes.model
 
 
+import com.example.funDoNotes.networkApi.Constant
+import com.example.funDoNotes.networkApi.LoginListner
+import com.example.funDoNotes.networkApi.LoginLoader
+import com.example.funDoNotes.networkApi.LoginResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -49,6 +53,22 @@ class UserAuthService {
                 listener(AuthListener(false, "User login filed"))
             }
         }
+
+    }
+
+    fun restApiLogin(email : String, password : String, listener: (ApiAuthListner) -> Unit){
+        val loginLoader = LoginLoader()
+        loginLoader.getLoginDone(object : LoginListner{
+            override fun onLogin(response: LoginResponse?, status: Boolean) {
+                if (status){
+                    if (response != null){
+                        Constant.getInstance()?.setUserId(response.localId)
+                        listener(ApiAuthListner(status = status, localId = response.localId, idToken = response.idToken))
+                    }
+                }
+            }
+
+        }, email, password)
 
     }
 

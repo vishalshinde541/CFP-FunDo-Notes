@@ -65,7 +65,13 @@ class UpdateNoteFragment : Fragment() {
         }
 
         readAndShowNoteDataFromFirestore()
+        updateChangesInNote()
 
+        return view
+    }
+
+
+    private  fun updateChangesInNote(){
         updateBtn.setOnClickListener {
 
             var noteTitle: String = updateTitle.text.toString()
@@ -113,15 +119,13 @@ class UpdateNoteFragment : Fragment() {
                 }
             var helper = MyDbHelper(requireContext())
             helper.updateData(
-                sqlId,
+                 sqlId,
                 note.title.toString(),
                 note.subtitle.toString(),
                 note.content.toString(),
                 note.timestamp.toString()
             )
         }
-
-        return view
     }
 
     private fun readAndShowNoteDataFromFirestore() {
