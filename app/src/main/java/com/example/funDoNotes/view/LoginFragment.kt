@@ -96,10 +96,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun signInGoogle() {
-        val signInIntent: Intent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, 1)
-//        val signInIntent = googleSignInClient.signInIntent
-//        launcher.launch(signInIntent)
+//        val signInIntent: Intent = googleSignInClient.signInIntent
+//        startActivityForResult(signInIntent, 1)
+        val signInIntent = googleSignInClient.signInIntent
+        launcher.launch(signInIntent)
     }
 
     private val launcher =
@@ -135,8 +135,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             } else {
                 loginBtn.isEnabled = true
                 loginBtn.alpha = 1.0f
-                Toast.makeText(context, "failed with rest api", Toast.LENGTH_SHORT).show()
-//                Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+
             }
         })
     }
