@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id  'kotlin-android-extensions'
+    id 'com.google.firebase.crashlytics'
 
 }
 
@@ -82,6 +83,9 @@ dependencies {
 
     // GSON
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+
+    //Crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
 
 }

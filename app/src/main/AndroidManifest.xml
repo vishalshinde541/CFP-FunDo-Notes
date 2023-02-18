@@ -5,6 +5,7 @@
     
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginAndRegistrationWithFragment"
         tools:targetApi="31">
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_baseline_notifications_active_24" />
@@ -25,7 +25,8 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/red" />
-
+        <receiver android:name=".view.ReminderNotification"
+            android:enabled="true"/>
         <activity
             android:name="com.example.funDoNotes.view.SplashActivity"
             android:exported="true"

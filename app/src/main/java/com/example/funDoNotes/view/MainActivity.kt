@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), NavDrawerHandler {
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
         fun signOut() {
             fAuth.signOut()
@@ -74,7 +74,6 @@ class MainActivity : AppCompatActivity(), NavDrawerHandler {
             when (it.itemId) {
 
                 R.id.nav_home -> replaceFragment(HomePageFragment(), it.title.toString())
-                R.id.nav_reminders -> replaceFragment(RemindersFragment(), it.title.toString())
                 R.id.nav_archive -> replaceFragment(ArchiveFragment(), it.title.toString())
                 R.id.nav_setting -> replaceFragment(SettingFragment(), it.title.toString())
                 R.id.nav_helpFeedback -> Toast.makeText(

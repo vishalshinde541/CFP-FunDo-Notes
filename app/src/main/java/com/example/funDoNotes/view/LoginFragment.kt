@@ -47,7 +47,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        (requireActivity() as AppCompatActivity).supportActionBar?.hide()
+//        (requireActivity() as AppCompatActivity).supportActionBar?.hide()
 //        (activity as MainActivity?)?.setDrawerLocked()
 
         // Inflate the layout for this fragment

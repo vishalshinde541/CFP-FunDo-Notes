@@ -32,6 +32,7 @@ class CreateNewNoteFragment : Fragment() {
     private lateinit var contentEditText: EditText
 
     private lateinit var backImageButton: ImageButton
+    private lateinit var reminderImageButton: ImageButton
     private lateinit var saveNoteButton: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +65,7 @@ class CreateNewNoteFragment : Fragment() {
         contentEditText = view.findViewById(R.id.addNote_contentText)
         saveNoteButton = view.findViewById(R.id.saveNoteBtn)
         backImageButton = view.findViewById(R.id.backBtn)
+        reminderImageButton = view.findViewById(R.id.reminderBtn)
 
         checkNEtworkAndSaveNoteTOSqliteOrFirebase()
 
@@ -73,6 +75,12 @@ class CreateNewNoteFragment : Fragment() {
             transaction?.replace(R.id.fragmentsContainer, fragment)?.commit()
         }
 
+        reminderImageButton.setOnClickListener {
+            val fragmentManager = fragmentManager
+            val newFragment = SetReminderFragment()
+            newFragment.show(fragmentManager!!, "dialog Fragment")
+            true
+        }
 
         return view
     }

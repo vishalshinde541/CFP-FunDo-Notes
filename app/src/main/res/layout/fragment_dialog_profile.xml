@@ -10,14 +10,17 @@
        android:background="#83F0F4">
 
        <ImageButton
+           android:id="@+id/dialog_dismissBtn"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:id="@+id/dialog_dismissBtn"
-           android:text="Close"
-           android:src="@drawable/ic_baseline_close_24"
            android:layout_alignParentEnd="true"
+           android:layout_marginStart="10dp"
+           android:layout_marginTop="10dp"
+           android:layout_marginEnd="10dp"
+           android:layout_marginBottom="10dp"
            android:background="@null"
-           android:layout_margin="10dp"/>
+           android:src="@drawable/ic_baseline_close_24"
+           android:text="Close" />
 
        <de.hdodenhof.circleimageview.CircleImageView
            android:id="@+id/dialog_circularProfilePic"
